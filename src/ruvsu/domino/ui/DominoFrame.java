@@ -8,21 +8,6 @@ import java.util.List;
 
 public class DominoFrame extends JFrame {
 
-//    public DominoFrame(String title, java.awt.List<? extends Tile> tiles) throws HeadlessException {
-//        super(title);
-//        setLayout(new FlowLayout());
-//        List<JButton> uList = tiles.stream().map(a -> {
-//            if(a instanceof Tile){
-//                return new TileUI((Tile) a);
-//            }
-//            return new JButton(String.valueOf(a.first));
-//        }).toList();
-//        uList.forEach(c -> add(c));
-//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        pack();
-//    }
-
-
     public DominoFrame(String title, List<? extends Tile> tiles) throws HeadlessException {
         super(title);
         setLayout(new FlowLayout());

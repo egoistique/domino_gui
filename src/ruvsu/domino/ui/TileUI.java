@@ -10,8 +10,7 @@ public class TileUI extends JButton {
 
     public TileUI(Tile tile){
         this.tile = tile;
-        setText("\u1F038" + " " + tile.first + " " + tile.last);
-        //add(new JLabel("\\U+1F039"));
+        setText(new String(Character.toChars(127026)));
         setPreferredSize(new Dimension(100, 100));
     }
 
