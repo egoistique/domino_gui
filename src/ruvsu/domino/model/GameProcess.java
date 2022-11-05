@@ -1,30 +1,31 @@
-package ruvsu.domino;
+package ruvsu.domino.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Game {
+public class GameProcess {
     private boolean gameOver = false;
+
+    public final Heap heap = new Heap();
+    public final Table table = new Table();
+    public final Asking ask = new Asking();
+    public final GameBoard field = new GameBoard();
+
+    List<Player> players = new ArrayList<>();
+    Map<Coordinates, Integer> activeTiles = new HashMap<>();
+
+    Tile firstTile;
+    Tile currTile;
+
+    int countMoves = 0;
+    int checkFor = 0;
 
 
     public void process(){
-        String[][] f = new String[GameBoard.SIZE][GameBoard.SIZE];
-        Heap heap = new Heap();
-        Table table = new Table();
-        Asking ask = new Asking();
-        GameBoard field = new GameBoard(f);
+        field.initEmptyBoard();
 
-        Tile firstTile;
-
-        field.create();
-
-        List<Player> players = new ArrayList<>();
-
-        Map<Coords, Integer> activeTiles = new HashMap<>();
-
-        heap.bazar = heap.createHeap();
         heap.shuffleHeap(heap.bazar);
 
         int numOfPlayers = ask.askNumberOfPlayers();
@@ -52,12 +53,7 @@ public class Game {
 
         field.output();
 
-        int countMoves = 0;
-        int checkforExept = 0;
-
-        Tile currTile;
-
-        while (!gameOver && checkforExept < players.size()){
+        while (!gameOver && checkFor < players.size()){
             countMoves++;
             pl = table.defineMover(players, pl); //определить кто ходит
 
@@ -70,9 +66,9 @@ public class Game {
             }
 
             if(currTile.first == 99 && currTile.last == 99){//если игрок не смог походить после добирания из базара счетчик увеличивается
-                checkforExept++;
+                checkFor++;
             } else { //иначе обнуляется
-                checkforExept = 0;
+                checkFor = 0;
             }
 
             field.output();
@@ -93,15 +89,15 @@ public class Game {
 
     private int[] countPlayersPoints(List<Player> players){
         int[] sums = new int[players.size()];
-        int fullSumm = 0;
+        int fullSum = 0;
         for (int i = 0; i < players.size(); i++){
             sums[i] = countTotalPoints(players.get(i));
-            fullSumm += countTotalPoints(players.get(i));
+            fullSum += countTotalPoints(players.get(i));
         }
 
         for (int i = 0; i < players.size(); i++){
             if (sums[i] == 0){
-                sums[i] = fullSumm;
+                sums[i] = fullSum;
             }
         }
         return sums;

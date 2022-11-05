@@ -1,10 +1,6 @@
 package ruvsu.domino.ui;
 
-import ruvsu.domino.Tile;
-
 import javax.swing.*;
-import java.awt.*;
-import java.util.List;
 
 public class DominoFrame extends JFrame {
 

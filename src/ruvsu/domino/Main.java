@@ -1,5 +1,7 @@
 package ruvsu.domino;
 
+import ruvsu.domino.model.GameProcess;
+
 public class Main {
 //Играют от двух до четырёх человек. Для двух сдают по 7 камней, для 3 или 4 по 5 костей.
 // Остальные находятся в стороне, чистой стороной вверх (на базаре).
@@ -14,7 +16,7 @@ public class Main {
 // В этой ситуации выигрыш принадлежит тому, у кого меньше всего очков. В выигрыш ему записывается разность очков.
 // Игра продолжается до заранее оговорённой суммы, например, 100 очков
     public static void main(String[] args) {
-        Game game = new Game();
+        GameProcess game = new GameProcess();
         game.process();
     }
 }

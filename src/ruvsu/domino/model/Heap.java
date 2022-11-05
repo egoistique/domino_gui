@@ -1,13 +1,16 @@
-package ruvsu.domino;
+package ruvsu.domino.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Heap {
-
     //базар, откуда добираются кости
     public List<Tile> bazar = new ArrayList<>();
+
+    public Heap() {
+        this.bazar = createHeap();
+    }
 
     //раздача камней игрокам из колоды
     public List<Tile> give(List<Tile> list, int numOfTiles) {

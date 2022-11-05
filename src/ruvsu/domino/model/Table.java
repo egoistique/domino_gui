@@ -1,14 +1,10 @@
-package ruvsu.domino;
+package ruvsu.domino.model;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Table {
-//    private Map<String, Integer> activeTiles;
-
-
-
     //определить кто ходит первым
     public Player whoIsFirstMove(List<Player> players) {
         for (Player p : players) {

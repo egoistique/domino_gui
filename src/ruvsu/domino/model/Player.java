@@ -1,4 +1,4 @@
-package ruvsu.domino;
+package ruvsu.domino.model;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class Player {
         return fir;
     }
 
-    public Tile makeAMove(Map<Coords, Integer> activeTiles, Heap heap) {
+    public Tile makeAMove(Map<Coordinates, Integer> activeTiles, Heap heap) {
         Tile active;
         for (int i = 0; i < packOfTiles.size(); i++) {
             int first = packOfTiles.get(i).first;

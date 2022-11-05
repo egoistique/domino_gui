@@ -1,10 +1,10 @@
-package ruvsu.domino;
+package ruvsu.domino.model;
 
-public class Coords {
+public class Coordinates {
     public final int row;
     public final int col;
 
-    public Coords(int first, int last) {
+    public Coordinates(int first, int last) {
         this.row = first;
         this.col = last;
     }

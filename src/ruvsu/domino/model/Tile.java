@@ -1,4 +1,4 @@
-package ruvsu.domino;
+package ruvsu.domino.model;
 
 public class Tile {
 

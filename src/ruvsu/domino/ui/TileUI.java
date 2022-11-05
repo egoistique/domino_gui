@@ -1,6 +1,6 @@
 package ruvsu.domino.ui;
 
-import ruvsu.domino.Tile;
+import ruvsu.domino.model.Tile;
 
 import javax.swing.*;
 import java.awt.*;
