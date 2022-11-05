@@ -1,10 +1,31 @@
 package ruvsu.domino;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class Console {
+public class GameBoard {
     public static final int SIZE = 30;
-    String[][] field = new String[SIZE][SIZE];
+    String[][] field;
+    Map<Integer, Tile> tileImages = new HashMap<>();;
+
+    public GameBoard(String[][] field) {
+        this.field = field;
+        initTileImages();
+    }
+
+    public void initTileImages(){
+        int m = 0;
+        for(int i = 0; i < 7; i++){
+            for(int j = 0; j < 7; j++){
+                if(i == j){
+                    tileImages.put(127075 + i * 8, new Tile(i, j));
+                } else {
+                    tileImages.put(127025 + m, new Tile(i, j));
+                }
+                m++;
+            }
+        }
+    }
 
     public void create(){
         for (int i = 0; i < SIZE; i++){
@@ -24,7 +45,11 @@ public class Console {
     }
 
     public Map<Coords, Integer> putFirstTile(Tile tile, Map<Coords, Integer> activeTiles) {
-        field[SIZE / 2][SIZE / 2] = tile.first + "" + tile.last;
+        initTileImages();
+
+        int code = getCode(tileImages, tile);
+
+        field[SIZE / 2][SIZE / 2] = String.valueOf(Character.toChars(code));
         field[SIZE / 2][SIZE / 2 - 1] = ".";
         field[SIZE / 2][SIZE / 2 + 1] = ".";
 
@@ -34,6 +59,7 @@ public class Console {
     }
 
     public Map<Coords, Integer> putTile(Tile tile, Map<Coords, Integer> activeTiles) {
+        initTileImages();
         Coords location;
         int first = tile.first;
         int last = tile.last;
@@ -44,28 +70,15 @@ public class Console {
             return helpToMove(activeTiles, first, last);
         } else if (activeTiles.containsValue(first) && first == last) {//если дубль
             location = getKey(activeTiles, last);
+            int code = getCode(tileImages, tile);
 
-            field[location.row][location.col] = "||";
+            field[location.row][location.col] = String.valueOf(Character.toChars(code));
+            field[location.row + 1][location.col] = ".";
+            field[location.row - 1][location.col] = ".";
+            activeTiles.remove(getKeyForRemove(activeTiles, location.row, location.col));
 
-            if (location.row < location.col) { //15 16
-                field[location.row + 1][location.col] = "" + first;
-                field[location.row - 1][location.col] = "" + first;
-                field[location.row + 1][location.col + 1] = ".";
-                field[location.row - 1][location.col + 1] = ".";
-                activeTiles.remove(getKeyForRemove(activeTiles, location.row, location.col));
-
-                activeTiles.put(new Coords(location.row + 1, location.col + 1), last);
-                activeTiles.put(new Coords(location.row - 1, location.col + 1), last);
-            } else { //15 14 вроде норм
-                field[location.row + 1][location.col] = first + "";
-                field[location.row - 1][location.col] = first + "";
-                field[location.row + 1][location.col - 1] = ".";
-                field[location.row - 1][location.col - 1] = ".";
-
-                activeTiles.remove(getKeyForRemove(activeTiles, location.row, location.col));
-                activeTiles.put(new Coords(location.row + 1, location.col - 1), last);
-                activeTiles.put(new Coords(location.row - 1, location.col - 1), last);
-            }
+            activeTiles.put(new Coords(location.row + 1, location.col), last);
+            activeTiles.put(new Coords(location.row - 1, location.col), last);
         }
         return activeTiles;
     }
@@ -75,14 +88,18 @@ public class Console {
         location = getKey(activeTiles, last);
 
         if (location.row < location.col) {//15 16
-            field[location.row][location.col] = last + "" + first;
+            int code = getCode(tileImages, new Tile(last, first));
+
+            field[location.row][location.col] = String.valueOf(Character.toChars(code));
             field[location.row][location.col + 1] = ".";
 
             activeTiles.remove(getKeyForRemove(activeTiles,location.row, location.col));
             activeTiles.put(new Coords(location.row, location.col + 1), first);
             return activeTiles;
         } else {//15 14
-            field[location.row][location.col] = first + "" + last;
+            int code = getCode(tileImages, new Tile(first, last));
+
+            field[location.row][location.col] = String.valueOf(Character.toChars(code));
             field[location.row][location.col - 1] = ".";
 
             activeTiles.remove(getKeyForRemove(activeTiles,location.row, location.col));
@@ -110,5 +127,16 @@ public class Console {
             }
         }
         return new Coords(row, column);
+    }
+
+    protected Integer getCode(Map<Integer, Tile> tileImages, Tile tile) {
+        for (Map.Entry<Integer, Tile> entry : tileImages.entrySet()) {
+            Integer key = entry.getKey();
+            Tile value = entry.getValue();
+            if (value.last == tile.last && value.first == tile.first) {
+                return key;
+            }
+        }
+        return 0;
     }
 }

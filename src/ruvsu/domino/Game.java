@@ -8,11 +8,13 @@ import java.util.Map;
 public class Game {
     private boolean gameOver = false;
 
+
     public void process(){
+        String[][] f = new String[GameBoard.SIZE][GameBoard.SIZE];
         Heap heap = new Heap();
         Table table = new Table();
         Asking ask = new Asking();
-        Console field = new Console();
+        GameBoard field = new GameBoard(f);
 
         Tile firstTile;
 
@@ -38,8 +40,10 @@ public class Game {
         //раздаем кости игрокам
         table.givingTilesToPlayers(players, heap);
 
+        System.out.println(Character.toChars(127083));
+
         System.out.println("до 1 хода распределение костей такое: ");
-        output(players);
+        output(players, field);
 
         Player pl = table.whoIsFirstMove(players);
 
@@ -74,7 +78,7 @@ public class Game {
             field.output();
 
             System.out.println("после " + countMoves + " хода распределение костей такое: ");
-            output(players);
+            output(players, field);
             gameOverCheck(players);
         }
 
@@ -123,12 +127,14 @@ public class Game {
         }
     }
 
-    private void output(List<Player> players) {
+    private void output(List<Player> players, GameBoard field) {
+        int code;
         for (int i = 0; i < players.size(); i++){
             System.out.println("Player " + i );
             for (int j = 0; j < players.get(i).getPackOfTiles().size(); j++){
-                System.out.print(players.get(i).getPackOfTiles().get(j).first + ". "
-                        + players.get(i).getPackOfTiles().get(j).last + "    ");
+                code = field.getCode(field.tileImages, players.get(i).getPackOfTiles().get(j));
+                System.out.print(Character.toChars(code));
+                System.out.print(" ");
             }
             System.out.println();
         }
