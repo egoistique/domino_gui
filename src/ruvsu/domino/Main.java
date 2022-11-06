@@ -1,5 +1,6 @@
 package ruvsu.domino;
 
+import ruvsu.domino.model.Asking;
 import ruvsu.domino.model.GameProcess;
 
 public class Main {
@@ -17,6 +18,8 @@ public class Main {
 // Игра продолжается до заранее оговорённой суммы, например, 100 очков
     public static void main(String[] args) {
         GameProcess game = new GameProcess();
-        game.process();
+        Asking ask = new Asking();
+        int num = ask.askNumberOfPlayers();
+        game.processConsole(num);
     }
 }

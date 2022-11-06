@@ -5,7 +5,11 @@ import java.util.Map;
 
 public class GameBoard {
 
-    public final int SIZE = 30;
+    public final int SIZE = 20;
+    public final int DOMINO_CODE_HORIZONTAL = 127025;
+    public final int DOMINO_CODE_VERTICAL = 127075;
+    public final int STEP = 7;
+
     String[][] field;
     Map<Integer, Tile> tileImages;
 
@@ -16,14 +20,18 @@ public class GameBoard {
         initTileImages();
     }
 
+    public String[][] returnField(){
+        return field;
+    }
+
     public void initTileImages(){
         int m = 0;
-        for(int i = 0; i < 7; i++){
-            for(int j = 0; j < 7; j++){
+        for(int i = 0; i < STEP; i++){
+            for(int j = 0; j < STEP; j++){
                 if(i == j){
-                    tileImages.put(127075 + i * 8, new Tile(i, j));
+                    tileImages.put(DOMINO_CODE_VERTICAL + i * (STEP + 1), new Tile(i, j));
                 } else {
-                    tileImages.put(127025 + m, new Tile(i, j));
+                    tileImages.put(DOMINO_CODE_HORIZONTAL + m, new Tile(i, j));
                 }
                 m++;
             }
@@ -33,7 +41,7 @@ public class GameBoard {
     public void initEmptyBoard(){
         for (int i = 0; i < SIZE; i++){
             for (int j = 0; j < SIZE; j++){
-                field[i][j] = "  ";
+                field[i][j] = "";
             }
         }
     }

@@ -6,10 +6,24 @@ import java.util.List;
 
 public class Heap {
     //базар, откуда добираются кости
-    public List<Tile> bazar = new ArrayList<>();
+    private List<Tile> bazar;
 
     public Heap() {
-        this.bazar = createHeap();
+        bazar = new ArrayList<>();
+        createHeap();
+        shuffleHeap(bazar);
+    }
+
+    public List<Tile> getBazar() {
+        return bazar;
+    }
+
+    public int getBazarSize() {
+        return bazar.size();
+    }
+
+    public Tile removeTile(int index) {
+        return bazar.remove(index);
     }
 
     //раздача камней игрокам из колоды
@@ -23,17 +37,15 @@ public class Heap {
     }
 
     //создание колоды из 28 камней
-    protected List<Tile> createHeap() {
-        List<Tile> list = new ArrayList<>();
+    private void createHeap() {
         for (int i = 0; i < 7; i++) {
             for (int j = i; j < 7; j++) {
-                list.add(new Tile(i, j));
+                bazar.add(new Tile(i, j));
             }
         }
-        return list;
     }
 
-    protected void shuffleHeap(List<Tile> tiles){
+    private void shuffleHeap(List<Tile> tiles){
         Collections.shuffle(tiles);
     }
 }

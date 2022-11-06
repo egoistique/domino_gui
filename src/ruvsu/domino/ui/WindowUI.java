@@ -7,6 +7,7 @@ import java.util.Vector;
 
 public class WindowUI {
     private JComponent ui;
+    private final Font f = new Font("Monospaced", Font.PLAIN, 60);
     public static final int DOMINO_TILE_START = 127024;
     public static final int DOMINO_TILE_END = 127123;
     JTextArea textArea = new JTextArea(4, 10);
@@ -42,8 +43,6 @@ public class WindowUI {
         textArea.setLineWrap(true);
         ui.add(new JScrollPane(textArea));
 
-
-        Font f = new Font("Monospaced", Font.PLAIN, 60);
         textArea.setFont(f);
 
         /////////////////////////////////////////////

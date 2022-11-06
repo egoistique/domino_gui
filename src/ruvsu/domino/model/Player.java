@@ -38,8 +38,8 @@ public class Player {
             }
         }
 
-        if (heap.bazar.size() > 0){
-            Tile tile = heap.bazar.remove(0);
+        if (heap.getBazarSize() > 0){
+            Tile tile = heap.removeTile(0);
             packOfTiles.add(tile);
         }
 

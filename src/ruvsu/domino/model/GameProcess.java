@@ -6,84 +6,85 @@ import java.util.List;
 import java.util.Map;
 
 public class GameProcess {
+
     private boolean gameOver = false;
 
     public final Heap heap = new Heap();
     public final Table table = new Table();
     public final Asking ask = new Asking();
-    public final GameBoard field = new GameBoard();
-
+    public final GameBoard board = new GameBoard();
     List<Player> players = new ArrayList<>();
     Map<Coordinates, Integer> activeTiles = new HashMap<>();
 
-    Tile firstTile;
-    Tile currTile;
+    private Player pl;
+    private Tile firstTile;
+    private Tile currTile;
 
-    int countMoves = 0;
     int checkFor = 0;
 
+    public void processConsole(int numPl){
+        createPlayers(numPl);
 
-    public void process(){
-        field.initEmptyBoard();
-
-        heap.shuffleHeap(heap.bazar);
-
-        int numOfPlayers = ask.askNumberOfPlayers();
-        players.add(new Player());
-        players.add(new Player());
-        if(numOfPlayers == 3){
-            players.add(new Player());
-        } else if(numOfPlayers == 4){
-            players.add(new Player());
-            players.add(new Player());
-        }
-
-        //раздаем кости игрокам
         table.givingTilesToPlayers(players, heap);
 
-        System.out.println(Character.toChars(127083));
-
         System.out.println("до 1 хода распределение костей такое: ");
-        output(players, field);
+        output(players, board);
 
-        Player pl = table.whoIsFirstMove(players);
+        pl = table.whoIsFirstMove(players);
 
         firstTile = pl.makeAFirstMove();
-        activeTiles = field.putFirstTile(firstTile, activeTiles);
+        activeTiles = board.putFirstTile(firstTile, activeTiles);
 
-        field.output();
+        board.output();
 
         while (!gameOver && checkFor < players.size()){
-            countMoves++;
-            pl = table.defineMover(players, pl); //определить кто ходит
+            gameStep();
 
-            currTile = pl.makeAMove(activeTiles, heap); //получить кость которой игрок хочет походить
-            activeTiles = field.putTile(currTile, activeTiles);//положить на стол кость
+            board.output();
 
-            if(currTile.first == 99 && currTile.last == 99){//если игрок не смог походить (makeAMove вернул Tile(99,99)) он добрал из базара
-                currTile = pl.makeAMove(activeTiles, heap); //еще одна попытка походить
-                activeTiles = field.putTile(currTile, activeTiles);
-            }
-
-            if(currTile.first == 99 && currTile.last == 99){//если игрок не смог походить после добирания из базара счетчик увеличивается
-                checkFor++;
-            } else { //иначе обнуляется
-                checkFor = 0;
-            }
-
-            field.output();
-
-            System.out.println("после " + countMoves + " хода распределение костей такое: ");
-            output(players, field);
+            System.out.println("распределение костей такое: ");
+            output(players, board);
             gameOverCheck(players);
         }
 
-        System.out.println("Конец игры ");
-        System.out.println("Финальный результат игроков ");
+        System.out.println("Конец игры " + "\n Финальный результат игроков ");
 
+        outPoints();
+    }
+
+    public String[][] returnField(){
+        return board.field;
+    }
+
+    private void gameStep(){
+        pl = table.defineMover(players, pl); //определить кто ходит
+
+        currTile = pl.makeAMove(activeTiles, heap); //получить кость которой игрок хочет походить
+        activeTiles = board.putTile(currTile, activeTiles);//положить на стол кость
+
+        if(currTile.first == 99 && currTile.last == 99){//если игрок не смог походить (makeAMove вернул Tile(99,99)) он добрал из базара
+            currTile = pl.makeAMove(activeTiles, heap); //еще одна попытка походить
+            activeTiles = board.putTile(currTile, activeTiles);
+        }
+
+        if(currTile.first == 99 && currTile.last == 99){//если игрок не смог походить после добирания из базара счетчик увеличивается
+            checkFor++;
+        } else { //иначе обнуляется
+            checkFor = 0;
+        }
+
+    }
+
+    private void outPoints(){
         int[] sums = countPlayersPoints(players);
         for (int i = 0; i < players.size(); i++){
             System.out.println("Игрок " + i + " набрал " + sums[i] + " очков");
+        }
+    }
+
+    private void createPlayers(int numPlayers) {
+        for (int i = 0; i < numPlayers; i++) {
+            players.add(new Player());
         }
     }
 

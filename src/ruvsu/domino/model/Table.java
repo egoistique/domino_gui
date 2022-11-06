@@ -42,9 +42,9 @@ public class Table {
     public void givingTilesToPlayers(List<Player> players, Heap heap){
         for(Player p : players){
             if(players.size() == 2){
-                p.setPackOfTiles(heap.give(heap.bazar, 7));
+                p.setPackOfTiles(heap.give(heap.getBazar(), 7));
             } else {
-                p.setPackOfTiles(heap.give(heap.bazar, 5));
+                p.setPackOfTiles(heap.give(heap.getBazar(), 5));
             }
         }
     }
