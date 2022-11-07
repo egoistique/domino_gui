@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class GameBoard {
 
-    public final int SIZE = 20;
+    public static final int SIZE = 25;
     public final int DOMINO_CODE_HORIZONTAL = 127025;
     public final int DOMINO_CODE_VERTICAL = 127075;
     public final int STEP = 7;

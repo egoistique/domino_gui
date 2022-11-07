@@ -5,25 +5,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NumPlWindow extends JFrame{
+public class StartWindow extends JFrame{
     private JButton buttonOk =  new JButton("OK");
     private final JRadioButton radio2 = new JRadioButton("2");
     private final JRadioButton radio3 = new JRadioButton("3");
     private JRadioButton radio4 = new JRadioButton("4");
     private JLabel numPlLabel = new JLabel("Выберите число участников 2/3/4 ");
 
-    private JTextArea bazarArea = new JTextArea();
-
     private int num = 2;
 
-    public int getNum() {
-        return num;
-    }
-
-    public NumPlWindow(){
-        super("si");
+    public StartWindow(){
+        super("start");
         this.setBounds(500,500, 1000, 1000);
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Container container = this.getContentPane();
         container.setLayout(new GridLayout(3, 4,3, 3));
@@ -46,12 +40,12 @@ public class NumPlWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if(radio3.isSelected()) {
                     num = 3;
-                    NewWindow.setNum(num);
+                    BasicWindow.setNum(num);
                 } else {
                     num = 4;
-                    NewWindow.setNum(num);
+                    BasicWindow.setNum(num);
                 }
-                NewWindow newWindow = new NewWindow();
+                BasicWindow newWindow = new BasicWindow();
                 newWindow.run(num);
             }
         });
@@ -60,7 +54,7 @@ public class NumPlWindow extends JFrame{
     }
 
     public static void main(String[] args) {
-        NumPlWindow app = new NumPlWindow();
+        StartWindow app = new StartWindow();
         app.setVisible(true);
     }
 }
