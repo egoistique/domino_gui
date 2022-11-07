@@ -45,8 +45,8 @@ public class StartWindow extends JFrame{
                     num = 4;
                     BasicWindow.setNum(num);
                 }
-                BasicWindow newWindow = new BasicWindow();
-                newWindow.run(num);
+                BasicWindow basicWindow = new BasicWindow();
+                basicWindow.run();
             }
         });
 

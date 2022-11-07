@@ -10,8 +10,16 @@ public class GameBoard {
     public final int DOMINO_CODE_VERTICAL = 127075;
     public final int STEP = 7;
 
-    String[][] field;
-    Map<Integer, Tile> tileImages;
+    private String[][] field;
+    public final Map<Integer, Tile> tileImages;
+
+    public String[][] getField() {
+        return field;
+    }
+
+    public void setField(String[][] field) {
+        this.field = field;
+    }
 
     public GameBoard() {
         field = new String[SIZE][SIZE];
@@ -140,7 +148,7 @@ public class GameBoard {
         return new Coordinates(row, column);
     }
 
-    protected Integer getCode(Map<Integer, Tile> tileImages, Tile tile) {
+    public Integer getCode(Map<Integer, Tile> tileImages, Tile tile) {
         for (Map.Entry<Integer, Tile> entry : tileImages.entrySet()) {
             Integer key = entry.getKey();
             Tile value = entry.getValue();

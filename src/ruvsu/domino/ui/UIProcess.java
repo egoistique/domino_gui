@@ -1,13 +1,16 @@
-package ruvsu.domino.model;
+package ruvsu.domino.ui;
 
+import ruvsu.domino.model.*;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameProcess {
+public class UIProcess {
 
-    private boolean gameOver = false;
+    public boolean gameOver = false;
 
     public final Heap heap = new Heap();
     public final Table table = new Table();
@@ -15,51 +18,71 @@ public class GameProcess {
     List<Player> players = new ArrayList<>();
     Map<Coordinates, Integer> activeTiles = new HashMap<>();
 
-    private Player pl;
-    private Tile firstTile;
-    private Tile currTile;
+     Player pl;
+     Tile firstTile;
+     Tile currTile;
 
     int checkFor = 0;
 
-    public void processConsole(int numPl){
-        createPlayers(numPl);
-
-        table.givingTilesToPlayers(players, heap);
-
-        System.out.println("до 1 хода распределение костей такое: ");
-        output(players, board);
-
-        pl = table.whoIsFirstMove(players);
-
+    public void processUI(int numPl){
+        beginGamePr(numPl);
+        //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
         firstTile = pl.makeAFirstMove();
         activeTiles = board.putFirstTile(firstTile, activeTiles);
 
-        board.output();
 
         while (!gameOver && checkFor < players.size()){
+            //шаг игры
             gameStep();
 
-            board.output();
+            //вывести состояние гейм борда
 
-            System.out.println("распределение костей такое: ");
-            output(players, board);
+            //вывести в каждый текст филд текущие пак оф тайлсы
+
+            //проверить на гейм овер
             gameOverCheck(players);
         }
 
-        System.out.println("Конец игры " + "\n Финальный результат игроков ");
+        //вывести в каждый текст филд суммы очков
+    }
 
-        outPoints();
+    public Player beginGamePr(int numPl){
+        //создать игроков
+        createPlayers(numPl);
+
+        //раздать кости игрокам и вывести в текст филды
+        table.givingTilesToPlayers(players, heap);
+
+        //определить кто ходит первым, включить радиобаттнон
+        pl = table.whoIsFirstMove(players);
+        return pl;
+    }
+
+    public String packTilesToString(Player pl,  GameBoard field){
+        StringBuilder sb = new StringBuilder();
+        int code;
+        for (int i = 0; i < pl.getPackOfTiles().size(); i++){
+            code = field.getCode(field.tileImages, pl.getPackOfTiles().get(i));
+            String s = new String(Character.toChars(code));
+            sb.append(s);
+        }
+        return sb.toString();
     }
 
     public String[][] returnField(){
         return board.getField();
     }
 
-    private void gameStep(){
-        pl = table.defineMover(players, pl); //определить кто ходит
+    public void gameStep(){
+        //определить кто ходит
+        pl = table.defineMover(players, pl);
+        //включить радиобаттон
 
-        currTile = pl.makeAMove(activeTiles, heap); //получить кость которой игрок хочет походить
-        activeTiles = board.putTile(currTile, activeTiles);//положить на стол кость
+        //получить кость которой игрок хочет походить
+        currTile = pl.makeAMove(activeTiles, heap);
+
+        //положить на стол кость
+        activeTiles = board.putTile(currTile, activeTiles);
 
         if(currTile.first == 99 && currTile.last == 99){//если игрок не смог походить (makeAMove вернул Tile(99,99)) он добрал из базара
             currTile = pl.makeAMove(activeTiles, heap); //еще одна попытка походить
@@ -71,7 +94,6 @@ public class GameProcess {
         } else { //иначе обнуляется
             checkFor = 0;
         }
-
     }
 
     private void outPoints(){
@@ -114,7 +136,7 @@ public class GameProcess {
         return sum;
     }
 
-    private void gameOverCheck(List<Player> players){
+    public void gameOverCheck(List<Player> players){
         for (Player p : players){
             if(p.getPackOfTiles().size() == 0){
                 gameOver = true;
