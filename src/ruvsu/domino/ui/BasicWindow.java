@@ -44,6 +44,8 @@ public class BasicWindow extends JFrame{
 
     String[] columnNames = new String[GameBoard.SIZE];
 
+    List<JTextArea> areas = new ArrayList<>();
+
     private static int num = 2;
 
     public static void setNum(int num) {
@@ -65,6 +67,11 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
+        areas.add(areaMain);
+        areas.add(areaPl1);
+        areas.add(areaPl2);
+        areas.add(areaPl3);
+
         ButtonGroup group = new ButtonGroup();
         group.add(radio1);
         group.add(radio2);
@@ -75,6 +82,7 @@ public class BasicWindow extends JFrame{
 
 
         ui.add(new JScrollPane(beginGame()));
+
 
 
 //        buttonBegin.addActionListener(new ActionListener() {
@@ -103,6 +111,9 @@ public class BasicWindow extends JFrame{
         tableGameBoard = new JTable(uiProcess.board.getField(), columnNames);
         tableGameBoard.setFont(f);
         tableGameBoard.setRowHeight(45);
+        areaPl1.setText("done");
+
+        outPacks(uiProcess.players,uiProcess.board);
         return tableGameBoard;
     }
 
@@ -120,18 +131,20 @@ public class BasicWindow extends JFrame{
         }
     }
 
+    private void outPacks(List<Player> players, GameBoard field){
+        int code;
+        for (int i = 0; i < players.size(); i++){
+            String s = uiProcess.packTilesToString(players.get(i), uiProcess.board);
+            areas.get(i).setFont(f);
+            areas.get(i).setText(s);
+        }
+    }
+
     private JScrollPane createGameBoard(){
-
-
         for (int i = 0; i < GameBoard.SIZE; i++){
             columnNames[i] = String.valueOf(i);
         }
-
-//        GameProcess game = new GameProcess();
-//        game.processConsole(num);
         String[][] board = new String[25][25];
-        //board = game.returnField();
-
         tableGameBoard = new JTable(board, columnNames);
         tableGameBoard.setFont(f);
         tableGameBoard.setRowHeight(45);
