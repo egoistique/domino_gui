@@ -7,16 +7,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class BasicWindow extends JFrame{
     private JComponent ui  = new JPanel(new BorderLayout(5, 5));
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
     static JTextArea textArea = new JTextArea(4, 10);
-    JButton buttonBegin =  new JButton("OK");
     JTable tableGameBoard;
 
     JLabel labelPl1 = new JLabel("Игрок 1: ");
@@ -45,6 +42,7 @@ public class BasicWindow extends JFrame{
     String[] columnNames = new String[GameBoard.SIZE];
 
     List<JTextArea> areas = new ArrayList<>();
+    List<JRadioButton> radios = new ArrayList<>();
 
     private static int num = 2;
 
@@ -79,27 +77,22 @@ public class BasicWindow extends JFrame{
         group.add(radio0);
         radio0.setSelected(true);
 
+        radios.add(radio0);
+        radios.add(radio1);
+        radios.add(radio2);
+        radios.add(radio3);
 
 
         ui.add(new JScrollPane(beginGame()));
 
 
 
-//        buttonBegin.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                NumPlWindow app = new NumPlWindow();
-//                app.setVisible(true);
-//
-//                GameProcess game = new GameProcess();
-//                game.processConsole(num);
-//                String[][] board;
-//                board = game.returnField();
-//                table = new JTable(board, columnNames);
-//
-//                ui.add(new JScrollPane(table));
-//            }
-//        });
+        buttonNextStep.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ui.add(new JScrollPane(nextStep()));
+            }
+        });
     }
 
     private JTable beginGame(){
@@ -111,24 +104,67 @@ public class BasicWindow extends JFrame{
         tableGameBoard = new JTable(uiProcess.board.getField(), columnNames);
         tableGameBoard.setFont(f);
         tableGameBoard.setRowHeight(45);
-        areaPl1.setText("done");
 
+        //включить радио кнопку у того, кто сделал первый ход
+        int numOfCurrentRadio = defineFirstMover(uiProcess.players);
+        radios.get(numOfCurrentRadio).setSelected(true);
+
+        //вывести наборы плиток игроков
         outPacks(uiProcess.players,uiProcess.board);
         return tableGameBoard;
     }
 
-    private void cycle(){
-        while (!uiProcess.gameOver && uiProcess.checkFor < uiProcess.players.size()){
-            //шаг игры
-            uiProcess.gameStep();
+    private int defineFirstMover(List<Player> players){
+        int minSize = players.get(0).getPackOfTiles().size();
+        int numOfPl = 0;
+        for(int i = 0; i < players.size(); i++){
+            if(players.get(i).getPackOfTiles().size() < minSize){
+                minSize = players.get(i).getPackOfTiles().size();
+                numOfPl = i;
+            }
+        }
+        return numOfPl;
+    }
+
+    private JTable nextStep(){
+        //шаг игры
+        if(!uiProcess.gameOver && uiProcess.checkFor < uiProcess.players.size()) {
+            //сделать ход
+            Player pl = uiProcess.gameStep();
+
+            //включить нужную радио кнопку
+            int numOfRadio = findCurrPl(uiProcess.players, pl);
+            radios.get(numOfRadio).setSelected(true);
 
             //вывести состояние гейм борда
+            tableGameBoard = new JTable(uiProcess.board.getField(), columnNames);
+            tableGameBoard.setFont(f);
+            tableGameBoard.setRowHeight(45);
 
             //вывести в каждый текст филд текущие пак оф тайлсы
+            outPacks(uiProcess.players,uiProcess.board);
 
             //проверить на гейм овер
             uiProcess.gameOverCheck(uiProcess.players);
+            return tableGameBoard;
+        } else{
+
         }
+        return tableGameBoard;
+    }
+
+    private int findCurrPl(List<Player> players, Player pl){
+        int num = 0;
+        for(int i = 0; i < players.size(); i++){
+            if (listEqualsIgnoreOrder(players.get(i).getPackOfTiles(), pl.getPackOfTiles())){
+                num = i;
+            }
+        }
+        return num;
+    }
+
+    public <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
+        return new HashSet<>(list1).equals(new HashSet<>(list2));
     }
 
     private void outPacks(List<Player> players, GameBoard field){

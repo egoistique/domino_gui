@@ -73,7 +73,7 @@ public class UIProcess {
         return board.getField();
     }
 
-    public void gameStep(){
+    public Player gameStep(){
         //определить кто ходит
         pl = table.defineMover(players, pl);
         //включить радиобаттон
@@ -94,6 +94,8 @@ public class UIProcess {
         } else { //иначе обнуляется
             checkFor = 0;
         }
+
+        return pl;
     }
 
     private void outPoints(){

@@ -41,7 +41,7 @@ public class StartWindow extends JFrame{
                 if(radio3.isSelected()) {
                     num = 3;
                     BasicWindow.setNum(num);
-                } else {
+                } else if (radio4.isSelected()) {
                     num = 4;
                     BasicWindow.setNum(num);
                 }
