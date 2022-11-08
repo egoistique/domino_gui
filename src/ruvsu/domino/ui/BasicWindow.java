@@ -13,7 +13,6 @@ import java.util.List;
 public class BasicWindow extends JFrame{
     private JComponent ui  = new JPanel(new BorderLayout(5, 5));
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
-    static JTextArea textArea = new JTextArea(4, 10);
     JTable tableGameBoard;
 
     JLabel labelPl1 = new JLabel("Игрок 1: ");
@@ -82,10 +81,7 @@ public class BasicWindow extends JFrame{
         radios.add(radio2);
         radios.add(radio3);
 
-
         ui.add(new JScrollPane(beginGame()));
-
-
 
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
@@ -111,6 +107,7 @@ public class BasicWindow extends JFrame{
 
         //вывести наборы плиток игроков
         outPacks(uiProcess.players,uiProcess.board);
+        outBazar();
         return tableGameBoard;
     }
 
@@ -144,13 +141,24 @@ public class BasicWindow extends JFrame{
             //вывести в каждый текст филд текущие пак оф тайлсы
             outPacks(uiProcess.players,uiProcess.board);
 
+            outBazar();
+
             //проверить на гейм овер
             uiProcess.gameOverCheck(uiProcess.players);
             return tableGameBoard;
         } else{
-
+            gameOver();
         }
         return tableGameBoard;
+    }
+
+    private void gameOver(){
+        GameOverWindow gameOver = new GameOverWindow();
+        String points = "Итоговое число очков: " + uiProcess.outPoints();
+        String winner = "Победил игрок " + uiProcess.defineWinner();
+        gameOver.setPoints(points);
+        gameOver.setWinner(winner);
+        gameOver.setVisible(true);
     }
 
     private int findCurrPl(List<Player> players, Player pl){
@@ -168,12 +176,16 @@ public class BasicWindow extends JFrame{
     }
 
     private void outPacks(List<Player> players, GameBoard field){
-        int code;
         for (int i = 0; i < players.size(); i++){
             String s = uiProcess.packTilesToString(players.get(i), uiProcess.board);
             areas.get(i).setFont(f);
             areas.get(i).setText(s);
         }
+    }
+
+    private void outBazar(){
+        bazarArea.setFont(f);
+        bazarArea.setText(uiProcess.bazarToString());
     }
 
     private JScrollPane createGameBoard(){

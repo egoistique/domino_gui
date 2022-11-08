@@ -3,10 +3,7 @@ package ruvsu.domino.ui;
 import ruvsu.domino.model.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UIProcess {
 
@@ -69,6 +66,15 @@ public class UIProcess {
         return sb.toString();
     }
 
+    public String bazarToString(){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < heap.getBazarSize(); i++){
+            String s = new String(Character.toChars(127074));
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+
     public String[][] returnField(){
         return board.getField();
     }
@@ -98,11 +104,25 @@ public class UIProcess {
         return pl;
     }
 
-    private void outPoints(){
+    public String outPoints(){
+        String s = "";
         int[] sums = countPlayersPoints(players);
         for (int i = 0; i < players.size(); i++){
-            System.out.println("Игрок " + i + " набрал " + sums[i] + " очков");
+            s += ("\nИгрок " + i + " набрал " + sums[i] + " очков \n");
         }
+        return s;
+    }
+
+    public String defineWinner(){
+        int[] sums = countPlayersPoints(players);
+        int max = Arrays.stream(sums).max().getAsInt();
+        int num = 0;
+        for (int i = 0; i < sums.length; i++){
+            if(sums[i] == max){
+                num = i;
+            }
+        }
+        return String.valueOf(num);
     }
 
     private void createPlayers(int numPlayers) {
