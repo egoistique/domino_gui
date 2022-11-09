@@ -90,7 +90,7 @@ public class BasicWindow1 extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 ui.add(new JScrollPane(nextStep()));
-              //  mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
+                mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
         });
     }
@@ -314,10 +314,10 @@ public class BasicWindow1 extends JFrame{
 
         String[] columnNames1 = new String[size];
 
-
         for (int i = 0; i < size; i++){
             columnNames1[i] = String.valueOf(i);
         }
+
         String[][] data = new String[1][size];
 
         mainPanel.setLayout(new BorderLayout());
