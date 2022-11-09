@@ -2,6 +2,8 @@ package ruvsu.domino.ui;
 import ruvsu.domino.model.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +32,7 @@ public class BasicWindow1 extends JFrame{
     JLabel labelBazar = new JLabel("В колоде осталось: ");
     JTextArea bazarArea = new JTextArea();
     JTextArea areaMain = new JTextArea();
+    JTextArea currentSelectionLabel = new JTextArea("");
 
     JRadioButton radio1 = new JRadioButton("1");
     JRadioButton radio2 = new JRadioButton("2");
@@ -39,7 +42,6 @@ public class BasicWindow1 extends JFrame{
     UIProcess uiProcess = new UIProcess();
 
     String[] columnNamesBoard = new String[GameBoard.SIZE];
-    String[] columnNames = new String[7];
 
     List<JTextArea> areas = new ArrayList<>();
     List<JRadioButton> radios = new ArrayList<>();
@@ -93,6 +95,17 @@ public class BasicWindow1 extends JFrame{
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
         });
+
+        tableMain.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseClicked(java.awt.event.MouseEvent e){
+                int row = tableMain.rowAtPoint(e.getPoint());
+                int col = tableMain.columnAtPoint(e.getPoint());
+                String s = tableMain.getValueAt(row,col).toString();
+
+                currentSelectionLabel.setText(s);
+            }
+        });
+
     }
 
     private JTable beginGame(){
@@ -112,8 +125,6 @@ public class BasicWindow1 extends JFrame{
         //вывести наборы плиток игроков
         outPacks(uiProcess.players);
         outBazar();
-
-//        mainPanel.add(new JScrollPane(mainPlayersTilesToTable(uiProcess.players.get(0).packToString(new GameBoard()))));
 
         return tableGameBoard;
     }
@@ -147,6 +158,7 @@ public class BasicWindow1 extends JFrame{
         //шаг игры
         if(!uiProcess.gameOver && uiProcess.checkFor < uiProcess.players.size()) {
             //сделать ход
+
             Player pl = uiProcess.gameStep();
 
             //включить нужную радио кнопку
@@ -160,12 +172,6 @@ public class BasicWindow1 extends JFrame{
 
             //вывести в каждый текст филд текущие пак оф тайлсы
             outPacks(uiProcess.players);
-
-            //вывести пак оф тайлс главного игрока
-            String[][] tiles = uiProcess.players.get(0).packToString(new GameBoard());
-
-        //    mainPanel.add(new JScrollPane(mainPlayersTilesToTable()));
-
             outBazar();
 
             //проверить на гейм овер
@@ -264,21 +270,6 @@ public class BasicWindow1 extends JFrame{
         boxButtons.add(buttonForcedStep);
         topPanel.add(boxButtons);
 
-        buttonNextStep.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-            }
-        });
-
-        buttonForcedStep.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
         return topPanel;
     }
 
@@ -325,6 +316,7 @@ public class BasicWindow1 extends JFrame{
         tableMain = new JTable(data, columnNames1);
         tableMain.setFont(f);
         tableMain.setRowHeight(45);
+
         JScrollPane scrollPane = new JScrollPane(tableMain);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -334,20 +326,16 @@ public class BasicWindow1 extends JFrame{
         JLabel selLabel = new JLabel("Selected:");
         bottomPanel1.add(selLabel);
 
-        final JLabel currentSelectionLabel = new JLabel("");
+
+        currentSelectionLabel.setPreferredSize(new Dimension(200, 100));
+        currentSelectionLabel.setFont(f);
         currentSelectionLabel.setAutoscrolls(true);
         bottomPanel1.add(currentSelectionLabel);
 
         mainPanel.add(bottomPanel1, BorderLayout.SOUTH);
 
-        tableMain.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent e){
-                int row = tableMain.rowAtPoint(e.getPoint());
-                int col = tableMain.columnAtPoint(e.getPoint());
-                String s = tableMain.getValueAt(row,col).toString();
-                currentSelectionLabel.setText(s);
-            }
-        });
+        mainPanel.setPreferredSize(new Dimension(600, 200));
+
         return mainPanel;
     }
 
