@@ -18,6 +18,15 @@ public class Player {
         this.packOfTiles = packOfTiles;
     }
 
+    public String[][] packToString(GameBoard field){
+        int code;
+        String[][] tiles = new String[1][packOfTiles.size()];
+        for (int i = 0; i < packOfTiles.size(); i++){
+            code = field.getCode(field.tileImages, packOfTiles.get(i));
+            tiles[0][i] = String.valueOf(Character.toChars(code));
+        }
+        return tiles;
+    }
 
     //сделать первый ход
     public Tile makeAFirstMove() {

@@ -40,13 +40,17 @@ public class StartWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if(radio3.isSelected()) {
                     num = 3;
-                    BasicWindow.setNum(num);
+                    //BasicWindow.setNum(num);
+                    BasicWindow1.setNum(num);
                 } else if (radio4.isSelected()) {
                     num = 4;
-                    BasicWindow.setNum(num);
+                    //BasicWindow.setNum(num);
+                    BasicWindow1.setNum(num);
                 }
-                BasicWindow basicWindow = new BasicWindow();
-                basicWindow.run();
+//                BasicWindow basicWindow = new BasicWindow();
+//                basicWindow.run();
+                BasicWindow1 basicWindow1 = new BasicWindow1();
+                basicWindow1.run();
             }
         });
 
