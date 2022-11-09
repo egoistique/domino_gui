@@ -2,8 +2,6 @@ package ruvsu.domino.ui;
 import ruvsu.domino.model.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +45,8 @@ public class BasicWindow1 extends JFrame{
     List<JRadioButton> radios = new ArrayList<>();
 
     private static int num = 2;
+
+    private String code = "";
 
     public static void setNum(int num) {
         BasicWindow1.num = num;
@@ -101,8 +101,9 @@ public class BasicWindow1 extends JFrame{
                 int row = tableMain.rowAtPoint(e.getPoint());
                 int col = tableMain.columnAtPoint(e.getPoint());
                 String s = tableMain.getValueAt(row,col).toString();
-
                 currentSelectionLabel.setText(s);
+
+                code = s;
             }
         });
 
@@ -159,10 +160,13 @@ public class BasicWindow1 extends JFrame{
         if(!uiProcess.gameOver && uiProcess.checkFor < uiProcess.players.size()) {
             //сделать ход
 
-            Player pl = uiProcess.gameStep();
+            Player pl = uiProcess.gameStep(code);
 
             //включить нужную радио кнопку
             int numOfRadio = findCurrPl(uiProcess.players, pl);
+            if(numOfRadio == uiProcess.players.size() - 1){
+                numOfRadio = 0;
+            } else numOfRadio++;
             radios.get(numOfRadio).setSelected(true);
 
             //вывести состояние гейм борда
@@ -327,7 +331,7 @@ public class BasicWindow1 extends JFrame{
         bottomPanel1.add(selLabel);
 
 
-        currentSelectionLabel.setPreferredSize(new Dimension(200, 100));
+        currentSelectionLabel.setPreferredSize(new Dimension(200, 50));
         currentSelectionLabel.setFont(f);
         currentSelectionLabel.setAutoscrolls(true);
         bottomPanel1.add(currentSelectionLabel);

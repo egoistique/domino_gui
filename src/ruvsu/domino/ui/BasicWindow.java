@@ -126,25 +126,26 @@ public class BasicWindow extends JFrame{
     private JTable nextStep(){
         //шаг игры
         if(!uiProcess.gameOver && uiProcess.checkFor < uiProcess.players.size()) {
-            //сделать ход
-            Player pl = uiProcess.gameStep();
-
-            //включить нужную радио кнопку
-            int numOfRadio = findCurrPl(uiProcess.players, pl);
-            radios.get(numOfRadio).setSelected(true);
-
-            //вывести состояние гейм борда
-            tableGameBoard = new JTable(uiProcess.board.getField(), columnNames);
-            tableGameBoard.setFont(f);
-            tableGameBoard.setRowHeight(45);
-
-            //вывести в каждый текст филд текущие пак оф тайлсы
-            outPacks(uiProcess.players,uiProcess.board);
-
-            outBazar();
-
-            //проверить на гейм овер
-            uiProcess.gameOverCheck(uiProcess.players);
+//            //сделать ход
+//            //убрать коммы
+//     //       Player pl = uiProcess.gameStep();
+//
+//            //включить нужную радио кнопку
+//            int numOfRadio = findCurrPl(uiProcess.players, pl);
+//            radios.get(numOfRadio).setSelected(true);
+//
+//            //вывести состояние гейм борда
+//            tableGameBoard = new JTable(uiProcess.board.getField(), columnNames);
+//            tableGameBoard.setFont(f);
+//            tableGameBoard.setRowHeight(45);
+//
+//            //вывести в каждый текст филд текущие пак оф тайлсы
+//            outPacks(uiProcess.players,uiProcess.board);
+//
+//            outBazar();
+//
+//            //проверить на гейм овер
+//            uiProcess.gameOverCheck(uiProcess.players);
             return tableGameBoard;
         } else{
             gameOver();

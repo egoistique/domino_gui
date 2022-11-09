@@ -20,10 +20,11 @@ public class Player {
 
     public String[][] packToString(GameBoard field){
         int code;
-        String[][] tiles = new String[1][packOfTiles.size()];
+        String[][] tiles = new String[2][packOfTiles.size()];
         for (int i = 0; i < packOfTiles.size(); i++){
             code = field.getCode(field.tileImages, packOfTiles.get(i));
             tiles[0][i] = String.valueOf(Character.toChars(code));
+            tiles[1][i] = String.valueOf((code));
         }
         return tiles;
     }
@@ -33,6 +34,21 @@ public class Player {
         Tile fir = packOfTiles.get(0);
         packOfTiles.remove(0);
         return fir;
+    }
+
+    public Tile makeInteractiveMove(String st, GameBoard gb){
+        int code = Integer.parseInt(st);
+        Tile active = gb.tileImages.get(code);
+        int index = 0;
+        for(int i = 0; i < packOfTiles.size(); i++){
+            if(packOfTiles.get(i).first == active.first && packOfTiles.get(i).last == active.last){
+                index = i;
+            }
+        }
+
+        packOfTiles.remove(index);
+
+        return active;
     }
 
     public Tile makeAMove(Map<Coordinates, Integer> activeTiles, Heap heap) {

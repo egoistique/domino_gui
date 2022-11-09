@@ -21,28 +21,6 @@ public class UIProcess {
 
     int checkFor = 0;
 
-    public void processUI(int numPl){
-        beginGamePr(numPl);
-        //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
-        firstTile = pl.makeAFirstMove();
-        activeTiles = board.putFirstTile(firstTile, activeTiles);
-
-
-        while (!gameOver && checkFor < players.size()){
-            //шаг игры
-            gameStep();
-
-            //вывести состояние гейм борда
-
-            //вывести в каждый текст филд текущие пак оф тайлсы
-
-            //проверить на гейм овер
-            gameOverCheck(players);
-        }
-
-        //вывести в каждый текст филд суммы очков
-    }
-
     public Player beginGamePr(int numPl){
         //создать игроков
         createPlayers(numPl);
@@ -79,13 +57,17 @@ public class UIProcess {
         return board.getField();
     }
 
-    public Player gameStep(){
+    public Player gameStep(String code){
         //определить кто ходит
         pl = table.defineMover(players, pl);
         //включить радиобаттон
 
         //получить кость которой игрок хочет походить
-        currTile = pl.makeAMove(activeTiles, heap);
+        if (listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles()) && !code.equals("0")){
+            currTile = pl.makeInteractiveMove(code, board);
+        }else {
+            currTile = pl.makeAMove(activeTiles, heap);
+        }
 
         //положить на стол кость
         activeTiles = board.putTile(currTile, activeTiles);
@@ -103,6 +85,8 @@ public class UIProcess {
 
         return pl;
     }
+
+
 
     public String outPoints(){
         String s = "";
@@ -167,16 +151,7 @@ public class UIProcess {
         }
     }
 
-    private void output(List<Player> players, GameBoard field) {
-        int code;
-        for (int i = 0; i < players.size(); i++){
-            System.out.println("Player " + i );
-            for (int j = 0; j < players.get(i).getPackOfTiles().size(); j++){
-                code = field.getCode(field.tileImages, players.get(i).getPackOfTiles().get(j));
-                System.out.print(Character.toChars(code));
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
+    public <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
+        return new HashSet<>(list1).equals(new HashSet<>(list2));
     }
 }
