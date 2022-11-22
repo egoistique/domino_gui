@@ -51,6 +51,13 @@ public class Player {
         return active;
     }
 
+    public void mainPlayerTakeFromBazar(Heap heap){
+        if (heap.getBazarSize() > 0){
+            Tile tile = heap.removeTile(0);
+            packOfTiles.add(tile);
+        }
+    }
+
     public Tile makeAMove(Map<Coordinates, Integer> activeTiles, Heap heap) {
         Tile active;
         for (int i = 0; i < packOfTiles.size(); i++) {
