@@ -8,6 +8,4 @@ public class Coordinates {
         this.row = first;
         this.col = last;
     }
-
-
 }

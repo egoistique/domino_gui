@@ -66,6 +66,7 @@ public class GameProcess {
         //получить кость которой игрок хочет походить
         if(view == 1){ //если view = 1 то это консоль
             if (UIDominoUtils.listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles())) {
+                System.out.println("Выберите плитку, которой хотите походить");
                 int num = sc.nextInt();
                 currTile = pl.makeInteractiveConsoleMove(num);
             } else {

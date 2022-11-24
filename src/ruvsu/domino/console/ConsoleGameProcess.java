@@ -22,7 +22,7 @@ public class ConsoleGameProcess {
 
         while (!gameProcess.isGameOver() && gameProcess.getCheckFor() < gameProcess.getPlayers().size()){
             //сделать ход
-            Player pl = gameProcess.gameStep(1, "");
+            gameProcess.gameStep(1, "");
 
             //вывести состояние гейм борда
             gameProcess.board.output();

@@ -34,7 +34,6 @@ public class BasicWindow extends JFrame{
     JTextArea areaPl3 = new JTextArea();
 
     JButton buttonNextStep =  new JButton("Next Step");
-    JButton buttonForcedStep =  new JButton("Forced Next Step");
 
     JLabel labelMainPl = new JLabel("Ваш набор: ");
     JLabel labelBazar = new JLabel("В колоде осталось: ");
@@ -230,9 +229,7 @@ public class BasicWindow extends JFrame{
         Box boxButtons = Box.createVerticalBox();
         boxButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
         buttonNextStep.setPreferredSize(new Dimension(200, 70));
-        buttonForcedStep.setPreferredSize(new Dimension(200, 70));
         boxButtons.add(buttonNextStep);
-        boxButtons.add(buttonForcedStep);
         topPanel.add(boxButtons);
 
         return topPanel;

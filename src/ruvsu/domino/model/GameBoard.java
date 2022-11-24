@@ -28,10 +28,6 @@ public class GameBoard {
         initTileImages();
     }
 
-    public String[][] returnField(){
-        return field;
-    }
-
     public void initTileImages(){
         int m = 0;
         for(int i = 0; i < STEP; i++){

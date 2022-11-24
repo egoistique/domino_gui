@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StartWindow extends JFrame{
-    private JButton buttonOk =  new JButton("OK");
+    private final JButton buttonOk =  new JButton("OK");
     private final JRadioButton radio2 = new JRadioButton("2");
     private final JRadioButton radio3 = new JRadioButton("3");
-    private JRadioButton radio4 = new JRadioButton("4");
-    private JLabel numPlLabel = new JLabel("Выберите число участников 2/3/4 ");
+    private final JRadioButton radio4 = new JRadioButton("4");
+    private final JLabel numPlLabel = new JLabel("Выберите число участников 2/3/4 ");
 
     private int num = 2;
 
