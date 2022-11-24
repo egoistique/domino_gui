@@ -4,7 +4,7 @@ import ruvsu.domino.model.GameBoard;
 import ruvsu.domino.model.Heap;
 import ruvsu.domino.model.Player;
 import ruvsu.domino.model.Tile;
-//import ruvsu.domino.ui.BasicWindow1;
+import ruvsu.domino.ui.BoardTM;
 import ruvsu.domino.ui.GameOverWindow;
 import ruvsu.domino.model.GameProcess;
 
@@ -98,18 +98,13 @@ public class UIDominoUtils {
     }
 
     //начинало игры
-    public static JTable beginGame(GameProcess uiProcess, JTable tableGameBoard, int num, Font f, String[] columnNamesBoard, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
-        uiProcess.beginGamePr(num);
+    public static BoardTM beginGame(BoardTM boardTM, GameProcess uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
         //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
         Tile firstTile = uiProcess.getPl().makeAFirstMove();
         uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
 
-//        BasicWindow1.BoardTableModel model = (BasicWindow1.BoardTableModel)tableGameBoard.getModel();
-//        model.refresh();
-
-         tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
-        tableGameBoard.setFont(f);
-        tableGameBoard.setRowHeight(45);
+        //обновить gameBoard
+        boardTM.fireTableDataChanged();
 
         //включить радио кнопку у того, кто сделал первый ход
         int numOfCurrentRadio = defineFirstMover(uiProcess.getPlayers());
@@ -122,7 +117,7 @@ public class UIDominoUtils {
         outPacks(f, uiProcess, areas);
         outBazar(f, bazarArea, uiProcess);
 
-        return tableGameBoard;
+        return boardTM;
     }
 
     //определить 1 игрока
@@ -179,7 +174,7 @@ public class UIDominoUtils {
     }
 
     //следующий шаг
-    public static JTable nextStep(GameProcess uiProcess, String code, Font f, List<JRadioButton> radios, String[] columnNamesBoard, List<JTextArea> areas, JTextArea bazarArea, JTable tableGameBoard) {
+    public static BoardTM nextStep(BoardTM boardTM, GameProcess uiProcess, String code, Font f, List<JRadioButton> radios, String[] columnNamesBoard, List<JTextArea> areas, JTextArea bazarArea, JTable tableGameBoard) {
         //шаг игры
         if (!uiProcess.isGameOver() && uiProcess.getCheckFor() < uiProcess.getPlayers().size()) {
             //сделать ход
@@ -195,9 +190,14 @@ public class UIDominoUtils {
             //вывести состояние гейм борда
 //            BasicWindow1.BoardTableModel model = (BasicWindow1.BoardTableModel)tableGameBoard.getModel();
 //            model.refresh();
-            tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
-            tableGameBoard.setFont(f);
-            tableGameBoard.setRowHeight(45);
+
+            boardTM.fireTableDataChanged();
+
+//            tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
+//            tableGameBoard.setFont(f);
+//            tableGameBoard.setRowHeight(45);
+
+            System.out.println("обновление данных при ходе");
 
             //вывести в каждый текст филд текущие пак оф тайлсы
             UIDominoUtils.outPacks(f, uiProcess, areas);
@@ -205,11 +205,11 @@ public class UIDominoUtils {
 
             //проверить на гейм овер
             uiProcess.gameOverCheck(uiProcess.getPlayers());
-            return tableGameBoard;
+            return boardTM;
         } else {
             gameOver(uiProcess);
         }
-        return tableGameBoard;
+        return boardTM;
     }
 
     //окончание игры, вызов финального окна

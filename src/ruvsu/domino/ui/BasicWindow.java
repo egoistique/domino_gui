@@ -18,12 +18,14 @@ public class BasicWindow extends JFrame{
     private JComponent ui  = new JPanel(new BorderLayout(5, 5));
     JPanel mainPanel = new JPanel();
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
-    JTable tableGameBoard;
-    JTable tableMain;
 
-    TableModel boardTableModel = new BoardTableModel();
-    TableModel mainPlTableModel = new MainPlTableModel();
     String[][] board = new String[25][25];
+
+    BoardTM boardTableModel = new BoardTM(board);
+    TableModel mainPlTableModel = new MainPlTableModel();
+
+    JTable tableGameBoard = new JTable(boardTableModel);
+    JTable tableMain;
 
     JLabel labelPl1 = new JLabel("Игрок 1: ");
     JLabel labelPl2 = new JLabel("Игрок 2: ");
@@ -33,6 +35,8 @@ public class BasicWindow extends JFrame{
     JTextArea areaPl2 = new JTextArea();
     JTextArea areaPl3 = new JTextArea();
 
+
+    JButton buttonBeginStep =  new JButton("Begin");
     JButton buttonNextStep =  new JButton("Next Step");
 
     JLabel labelMainPl = new JLabel("Ваш набор: ");
@@ -87,6 +91,8 @@ public class BasicWindow extends JFrame{
 
         ui.add(new JScrollPane(beginGame()));
 
+        boardTableModel.fireTableDataChanged();
+
         mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
 
         initTableMainPl();
@@ -94,7 +100,19 @@ public class BasicWindow extends JFrame{
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ui.add(new JScrollPane(UIDominoUtils.nextStep(uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard)));
+                boardTableModel = UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard);
+                //ui.add(new JScrollPane(UIDominoUtils.nextStep(uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard)));
+                mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
+            }
+        });
+
+        buttonBeginStep.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boardTableModel = UIDominoUtils.beginGame(boardTableModel, uiProcess, f, radios, areas, bazarArea);
+                //ui.add(new JScrollPane(UIDominoUtils.nextStep(uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard)));
+
+                boardTableModel.fireTableDataChanged();
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
         });
@@ -136,21 +154,6 @@ public class BasicWindow extends JFrame{
         radios.add(radio3);
     }
 
-    public class BoardTableModel extends DefaultTableModel {
-        BoardTableModel() {
-            super(board, columnNamesBoard);
-            System.out.println("Inside myTableModel");
-        }
-        public boolean isCellEditable(int row,int cols){
-            return false;
-        }
-
-        public void refresh() {
-            fireTableDataChanged();
-        }
-
-    }
-
     private void initTableMainPl() {
         if (num == 2) {
             size = 5;
@@ -174,17 +177,9 @@ public class BasicWindow extends JFrame{
     }
 
     private JTable beginGame(){
-        //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
-        Tile firstTile = uiProcess.getPl().makeAFirstMove();
-        uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
-
         tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
         tableGameBoard.setFont(f);
         tableGameBoard.setRowHeight(45);
-
-        //включить радио кнопку у того, кто сделал первый ход
-        int numOfCurrentRadio = UIDominoUtils.defineFirstMover(uiProcess.getPlayers());
-        radios.get(numOfCurrentRadio).setSelected(true);
 
         //вывести наборы плиток игроков
         UIDominoUtils.outPacks(f, uiProcess, areas);
@@ -210,7 +205,7 @@ public class BasicWindow extends JFrame{
         for (int i = 0; i < GameBoard.SIZE; i++){
             columnNamesBoard[i] = String.valueOf(i);
         }
-        tableGameBoard = new JTable();
+        //tableGameBoard = new JTable(boardTableModel);
         tableGameBoard.setRowHeight(45);
         tableGameBoard.setFont(f);
         tableGameBoard.setModel(boardTableModel);
@@ -229,6 +224,8 @@ public class BasicWindow extends JFrame{
         Box boxButtons = Box.createVerticalBox();
         boxButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
         buttonNextStep.setPreferredSize(new Dimension(200, 70));
+        buttonBeginStep.setPreferredSize(new Dimension(200, 70));
+        boxButtons.add(buttonBeginStep);
         boxButtons.add(buttonNextStep);
         topPanel.add(boxButtons);
 
