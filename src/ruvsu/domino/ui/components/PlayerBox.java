@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.List;
 
 public class PlayerBox{
-
 //    public PlayerBox(int num) {
 //        super(BoxLayout.Y_AXIS);
 //        this.setSize(new Dimension(300, 300));

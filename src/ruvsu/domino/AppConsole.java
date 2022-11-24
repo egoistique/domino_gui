@@ -1,7 +1,7 @@
 package ruvsu.domino;
 
 import ruvsu.domino.model.Asking;
-import ruvsu.domino.model.GameProcess;
+import ruvsu.domino.console.ConsoleGameProcess;
 
 /**
 Играют от двух до четырёх человек. Для двух сдают по 7 камней, для 3 или 4 по 5 костей.
@@ -20,7 +20,7 @@ import ruvsu.domino.model.GameProcess;
 
 public class AppConsole {
     public static void main(String[] args) {
-        GameProcess game = new GameProcess();
+        ConsoleGameProcess game = new ConsoleGameProcess();
         Asking ask = new Asking();
         int num = ask.askNumberOfPlayers();
         game.processConsole(num);

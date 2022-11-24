@@ -36,6 +36,12 @@ public class Player {
         return fir;
     }
 
+    public Tile makeInteractiveConsoleMove(int num){
+        Tile active = packOfTiles.get(num);
+        packOfTiles.remove(num);
+        return active;
+    }
+
     public Tile makeInteractiveMove(String st, GameBoard gb){
         int code = Integer.parseInt(st);
         Tile active = gb.tileImages.get(code);

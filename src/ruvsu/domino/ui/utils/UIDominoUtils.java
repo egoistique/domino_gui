@@ -6,7 +6,7 @@ import ruvsu.domino.model.Player;
 import ruvsu.domino.model.Tile;
 //import ruvsu.domino.ui.BasicWindow1;
 import ruvsu.domino.ui.GameOverWindow;
-import ruvsu.domino.ui.UIProcess;
+import ruvsu.domino.model.GameProcess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +98,7 @@ public class UIDominoUtils {
     }
 
     //начинало игры
-    public static JTable beginGame(UIProcess uiProcess, JTable tableGameBoard,  int num, Font f, String[] columnNamesBoard, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
+    public static JTable beginGame(GameProcess uiProcess, JTable tableGameBoard, int num, Font f, String[] columnNamesBoard, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
         uiProcess.beginGamePr(num);
         //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
         Tile firstTile = uiProcess.getPl().makeAFirstMove();
@@ -139,7 +139,7 @@ public class UIDominoUtils {
     }
 
     //вывести наборы игроков в соответствующие поля
-    public static void outPacks(Font f, UIProcess uiProcess, List<JTextArea> areas) {
+    public static void outPacks(Font f, GameProcess uiProcess, List<JTextArea> areas) {
         for (int i = 0; i < uiProcess.getPlayers().size(); i++) {
             String s = UIDominoUtils.packTilesToString(uiProcess.getPlayers().get(i), uiProcess.board);
             areas.get(i).setFont(f);
@@ -148,7 +148,7 @@ public class UIDominoUtils {
     }
 
     //вывести базар
-    public static void outBazar(Font f, JTextArea bazarArea, UIProcess uiProcess) {
+    public static void outBazar(Font f, JTextArea bazarArea, GameProcess uiProcess) {
         bazarArea.setFont(f);
         bazarArea.setText(UIDominoUtils.bazarToString(uiProcess.heap));
     }
@@ -165,7 +165,7 @@ public class UIDominoUtils {
     }
 
     //вывести набор главного игрока
-    public static JTable mainPlayersTilesToTable(UIProcess uiProcess, Font f, JTable tableMain) {
+    public static JTable mainPlayersTilesToTable(GameProcess uiProcess, Font f, JTable tableMain) {
         String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
         String[] columnNames1 = new String[uiProcess.getPlayers().get(0).getPackOfTiles().size()];
         for (int i = 0; i < uiProcess.getPlayers().get(0).getPackOfTiles().size(); i++) {
@@ -179,11 +179,11 @@ public class UIDominoUtils {
     }
 
     //следующий шаг
-    public static JTable nextStep(UIProcess uiProcess, String code, Font f, List<JRadioButton> radios, String[] columnNamesBoard, List<JTextArea> areas, JTextArea bazarArea, JTable tableGameBoard) {
+    public static JTable nextStep(GameProcess uiProcess, String code, Font f, List<JRadioButton> radios, String[] columnNamesBoard, List<JTextArea> areas, JTextArea bazarArea, JTable tableGameBoard) {
         //шаг игры
         if (!uiProcess.isGameOver() && uiProcess.getCheckFor() < uiProcess.getPlayers().size()) {
             //сделать ход
-            Player pl = uiProcess.gameStep(code);
+            Player pl = uiProcess.gameStep(2, code);
 
             //включить нужную радио кнопку
             int numOfRadio = UIDominoUtils.findCurrPl(uiProcess.getPlayers(), pl);
@@ -213,7 +213,7 @@ public class UIDominoUtils {
     }
 
     //окончание игры, вызов финального окна
-    public static void gameOver(UIProcess uiProcess) {
+    public static void gameOver(GameProcess uiProcess) {
         GameOverWindow gameOver = new GameOverWindow();
         String points = "Итоговое число очков: " + UIDominoUtils.outPoints(uiProcess.getPlayers());
         String winner = "Победил игрок " + UIDominoUtils.defineWinner(uiProcess.getPlayers());

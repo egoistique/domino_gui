@@ -47,7 +47,7 @@ public class BasicWindow extends JFrame{
     JRadioButton radio3 = new JRadioButton("3");
     JRadioButton radio0 = new JRadioButton("0");
 
-    UIProcess uiProcess = new UIProcess();
+    GameProcess uiProcess = new GameProcess();
 
     String[] columnNamesBoard = new String[GameBoard.SIZE];
 
@@ -147,7 +147,6 @@ public class BasicWindow extends JFrame{
         }
 
         public void refresh() {
-            //board = new String[25][25];
             fireTableDataChanged();
         }
 
