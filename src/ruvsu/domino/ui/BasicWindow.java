@@ -52,7 +52,7 @@ public class BasicWindow extends JFrame{
 
     private String code = "";
 
-    public static void setNum(int num) {
+    public void setNum(int num) {
         BasicWindow.num = num;
     }
 
