@@ -8,8 +8,6 @@ import ruvsu.domino.ui.utils.UIDominoUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,12 +15,12 @@ import java.util.*;
 import java.util.List;
 
 public class BasicWindow extends JFrame{
-    private JComponent ui  = new JPanel(new BorderLayout(5, 5));
-    private JPanel mainPanel = new JPanel();
+    private final JComponent ui  = new JPanel(new BorderLayout(5, 5));
+    private final JPanel mainPanel = new JPanel();
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
 
     private String[][] board = new String[25][25];
-    private String[][] data = new String[2][7];
+    private String[][] data = new String[7][2];
 
     private BoardTM boardTableModel = new BoardTM(board);
     private MainTM mainPlTableModel = new MainTM(data);
@@ -32,6 +30,7 @@ public class BasicWindow extends JFrame{
 
     private JButton buttonBeginStep =  new JButton("Begin");
     private JButton buttonNextStep =  new JButton("Next Step");
+    private JButton buttonTakeFromBazar =  new JButton("Взять из базара");
 
     private JLabel labelMainPl = new JLabel("Ваш набор: ");
     private JLabel labelBazar = new JLabel("В колоде осталось: ");
@@ -40,14 +39,11 @@ public class BasicWindow extends JFrame{
 
     private GameProcess uiProcess = new GameProcess();
 
-    private String[] columnNamesBoard = new String[GameBoard.SIZE];
-
     private List<JTextArea> areas = new ArrayList<>();
     private List<JLabel> labels = new ArrayList<>();
     private List<JRadioButton> radios = new ArrayList<>();
 
     private int size = 7;
-    private String[] columnNames1;
 
     private static int num = 2;
 
@@ -76,11 +72,11 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        boardTableModel = UIDominoUtils.beginGame(boardTableModel, uiProcess, columnNamesBoard, f, areas, bazarArea);
+        UIDominoUtils.beginGame(uiProcess, f, areas, bazarArea);
 
-        //ui.add(new JScrollPane(UIDominoUtils.beginGame(boardTableModel, uiProcess, columnNamesBoard, f, areas, bazarArea)));
+        UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
 
-        mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
+        mainPanel.add(new JScrollPane((tableMain)));
 
         initTableMainPl();
 
@@ -89,16 +85,28 @@ public class BasicWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
+                UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+                mainPlTableModel.fireTableDataChanged();
             }
         });
 
         buttonBeginStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boardTableModel = UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
+                UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
+                UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+                mainPlTableModel.fireTableDataChanged();
+            }
+        });
+
+        buttonTakeFromBazar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UIDominoUtils.takeFromBazar(uiProcess, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+                mainPlTableModel.fireTableDataChanged();
+                UIDominoUtils.outBazar(f, bazarArea, uiProcess);
             }
         });
 
@@ -113,11 +121,6 @@ public class BasicWindow extends JFrame{
             }
         });
 
-        tableGameBoard.getModel().addTableModelListener(new TableModelListener() {
-            public void tableChanged(TableModelEvent e) {
-                System.out.println("update");
-            }
-        });
     }
 
     private void initLists(int num){
@@ -135,30 +138,10 @@ public class BasicWindow extends JFrame{
         if (num == 2) {
             size = 5;
         }
-        columnNames1 = new String[size];
         data = new String[1][size];
-        for (int i = 0; i < size; i++) {
-            columnNames1[i] = String.valueOf(i);
-        }
-    }
-
-    private JTable mainPlayersTilesToTable(){
-        String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
-        String[] columnNames1 = new String[uiProcess.getPlayers().get(0).getPackOfTiles().size()];
-        for (int i = 0; i < uiProcess.getPlayers().get(0).getPackOfTiles().size(); i++){
-            columnNames1[i] = String.valueOf(i);
-        }
-
-        tableMain = new JTable(tiles, columnNames1);
-        tableMain.setFont(f);
-        tableMain.setRowHeight(45);
-        return tableMain;
     }
 
     private JScrollPane createGameBoard(){
-        for (int i = 0; i < GameBoard.SIZE; i++){
-            columnNamesBoard[i] = String.valueOf(i);
-        }
         tableGameBoard.setRowHeight(45);
         tableGameBoard.setFont(f);
         tableGameBoard.setModel(boardTableModel);
@@ -178,8 +161,10 @@ public class BasicWindow extends JFrame{
         boxButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
         buttonNextStep.setPreferredSize(new Dimension(200, 70));
         buttonBeginStep.setPreferredSize(new Dimension(200, 70));
+        buttonTakeFromBazar.setPreferredSize(new Dimension(200, 70));
         boxButtons.add(buttonBeginStep);
         boxButtons.add(buttonNextStep);
+        boxButtons.add(buttonTakeFromBazar);
         topPanel.add(boxButtons);
 
         return topPanel;

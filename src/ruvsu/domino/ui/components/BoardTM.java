@@ -8,10 +8,6 @@ public class BoardTM extends AbstractTableModel {
         this.board = board;
     }
 
-    public String[][] getBoard() {
-        return board;
-    }
-
     public void setBoard(String[][] board) {
         this.board = board;
     }

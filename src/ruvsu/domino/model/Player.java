@@ -42,9 +42,17 @@ public class Player {
         return active;
     }
 
+    public void interactiveTakeFromBazar(Heap heap){
+        if (heap.getBazarSize() > 0){
+            Tile tile = heap.removeTile(0);
+            packOfTiles.add(tile);
+        }
+    }
+
     public Tile makeInteractiveMove(String st, GameBoard gb){
         int code = Integer.parseInt(st);
         Tile active = gb.tileImages.get(code);
+
         int index = 0;
         for(int i = 0; i < packOfTiles.size(); i++){
             if(packOfTiles.get(i).first == active.first && packOfTiles.get(i).last == active.last){

@@ -7,6 +7,7 @@ import ruvsu.domino.model.Tile;
 import ruvsu.domino.ui.components.BoardTM;
 import ruvsu.domino.ui.GameOverWindow;
 import ruvsu.domino.model.GameProcess;
+import ruvsu.domino.ui.components.MainTM;
 
 import javax.swing.*;
 import java.awt.*;
@@ -121,17 +122,10 @@ public class UIDominoUtils {
     }
 
     //начало игры
-    public static BoardTM beginGame(BoardTM boardTM, GameProcess uiProcess, String[] columnNamesBoard, Font f, List<JTextArea> areas, JTextArea bazarArea){
-//        JTable tableGameBoard = new JTable(boardTM);
-//        tableGameBoard.setFont(f);
-//        tableGameBoard.setRowHeight(45);
-
-        boardTM.fireTableDataChanged();
-
+    public static void beginGame(GameProcess uiProcess, Font f, List<JTextArea> areas, JTextArea bazarArea){
         //вывести наборы плиток игроков
         UIDominoUtils.outPacks(f, uiProcess, areas);
         UIDominoUtils.outBazar(f, bazarArea, uiProcess);
-        return boardTM;
     }
 
     //определить 1 игрока
@@ -173,20 +167,6 @@ public class UIDominoUtils {
         return num;
     }
 
-    //вывести набор главного игрока
-//    public static JTable mainPlayersTilesToTable(GameProcess uiProcess, Font f, JTable tableMain) {
-//        String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
-//        String[] columnNames1 = new String[uiProcess.getPlayers().get(0).getPackOfTiles().size()];
-//        for (int i = 0; i < uiProcess.getPlayers().get(0).getPackOfTiles().size(); i++) {
-//            columnNames1[i] = String.valueOf(i);
-//        }
-//
-//        tableMain = new JTable(tiles, columnNames1);
-//        tableMain.setFont(f);
-//        tableMain.setRowHeight(45);
-//        return tableMain;
-//    }
-
     //следующий шаг
     public static void nextStep(BoardTM boardTM, GameProcess uiProcess, String code, Font f, List<JRadioButton> radios,List<JTextArea> areas, JTextArea bazarArea) {
         //шаг игры
@@ -201,8 +181,6 @@ public class UIDominoUtils {
             } else numOfRadio++;
             radios.get(numOfRadio).setSelected(true);
 
-            System.out.println("обновление данных при ходе");
-
             //вывести в каждый текст филд текущие пак оф тайлсы
             UIDominoUtils.outPacks(f, uiProcess, areas);
             UIDominoUtils.outBazar(f, bazarArea, uiProcess);
@@ -214,6 +192,31 @@ public class UIDominoUtils {
         } else {
             gameOver(uiProcess);
         }
+    }
+
+    //взять из базара
+    public static void takeFromBazar(GameProcess uiProcess, MainTM mainPlTableModel){
+        uiProcess.getPlayers().get(0).interactiveTakeFromBazar(uiProcess.heap);
+        mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+    }
+
+    //вывести набор главного игрока
+    public static void mainPlayersTilesToTable(GameProcess uiProcess, MainTM mainPlTableModel){
+        String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
+
+        String[][] mainPlTiles = new String[2][7];
+
+        for (int i = 0; i < 7; i++){
+            if(i < uiProcess.getPlayers().get(0).getPackOfTiles().size()){
+                mainPlTiles[0][i] = tiles[0][i];
+                mainPlTiles[1][i] = tiles[1][i];
+            } else{
+                mainPlTiles[0][i] = "";
+                mainPlTiles[1][i] = "";
+            }
+        }
+
+        mainPlTableModel.setMainPlayerTiles(mainPlTiles);
     }
 
     //окончание игры, вызов финального окна

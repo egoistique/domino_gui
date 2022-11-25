@@ -75,7 +75,7 @@ public class GameProcess {
         }else if (view == 2){ //если view = 2 то это оконное приложение
             if (UIDominoUtils.listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles()) && !code.equals("")) {
                 currTile = pl.makeInteractiveMove(code, board);
-            } else {
+            } else{
                 currTile = pl.makeAMove(activeTiles, heap);
             }
         } else if(view == 3){//если view = 3 то это клиент сервер

@@ -3,25 +3,28 @@ package ruvsu.domino.ui.components;
 import javax.swing.table.AbstractTableModel;
 
 public class MainTM extends AbstractTableModel {
-    String[][] mainPlayrTiles;
-    public MainTM(String[][] board) {
-        super();
-        this.mainPlayrTiles = board;
+    private String[][] mainPlayerTiles;
+    public MainTM(String[][] mainPlayerTiles) {
+        this.mainPlayerTiles = mainPlayerTiles;
+    }
+
+    public void setMainPlayerTiles(String[][] mainPlayerTiles) {
+        this.mainPlayerTiles = mainPlayerTiles;
     }
 
     @Override
     public int getRowCount() {
-        return mainPlayrTiles.length;
+        return mainPlayerTiles.length;
     }
 
     @Override
     public int getColumnCount() {
-        return mainPlayrTiles.length;
+        return mainPlayerTiles.length;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return null;
+        return mainPlayerTiles[rowIndex][columnIndex];
     }
 }
 
