@@ -38,14 +38,14 @@ public class StartWindow extends JFrame{
         buttonOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BasicWindow basicWindow = new BasicWindow();
+                num = 2;
                 if(radio3.isSelected()) {
                     num = 3;
-                    basicWindow.setNum(num);
                 } else if (radio4.isSelected()) {
                     num = 4;
-                    basicWindow.setNum(num);
                 }
+                BasicWindow basicWindow = new BasicWindow();
+                basicWindow.setNum(num);
                 basicWindow.run();
             }
         });
