@@ -97,8 +97,8 @@ public class UIDominoUtils {
         return new HashSet<>(list1).equals(new HashSet<>(list2));
     }
 
-    //начинало игры
-    public static BoardTM beginGame(BoardTM boardTM, GameProcess uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
+    //сделать 1 шаг
+    public static BoardTM firstStep(BoardTM boardTM, GameProcess uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
         //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
         Tile firstTile = uiProcess.getPl().makeAFirstMove();
         uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
@@ -118,6 +118,19 @@ public class UIDominoUtils {
         outBazar(f, bazarArea, uiProcess);
 
         return boardTM;
+    }
+
+    //начинало игры
+    public static JTable beginGame(GameProcess uiProcess, String[] columnNamesBoard, Font f, List<JTextArea> areas, JTextArea bazarArea){
+        JTable tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
+        tableGameBoard.setFont(f);
+        tableGameBoard.setRowHeight(45);
+
+        //вывести наборы плиток игроков
+        UIDominoUtils.outPacks(f, uiProcess, areas);
+        UIDominoUtils.outBazar(f, bazarArea, uiProcess);
+
+        return tableGameBoard;
     }
 
     //определить 1 игрока
@@ -188,14 +201,7 @@ public class UIDominoUtils {
             radios.get(numOfRadio).setSelected(true);
 
             //вывести состояние гейм борда
-//            BasicWindow1.BoardTableModel model = (BasicWindow1.BoardTableModel)tableGameBoard.getModel();
-//            model.refresh();
-
             boardTM.fireTableDataChanged();
-
-//            tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
-//            tableGameBoard.setFont(f);
-//            tableGameBoard.setRowHeight(45);
 
             System.out.println("обновление данных при ходе");
 

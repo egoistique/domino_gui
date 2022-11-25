@@ -27,28 +27,13 @@ public class BasicWindow extends JFrame{
     JTable tableGameBoard = new JTable(boardTableModel);
     JTable tableMain;
 
-    JLabel labelPl1 = new JLabel("Игрок 1: ");
-    JLabel labelPl2 = new JLabel("Игрок 2: ");
-    JLabel labelPl3 = new JLabel("Игрок 3: ");
-
-    JTextArea areaPl1 = new JTextArea();
-    JTextArea areaPl2 = new JTextArea();
-    JTextArea areaPl3 = new JTextArea();
-
-
     JButton buttonBeginStep =  new JButton("Begin");
     JButton buttonNextStep =  new JButton("Next Step");
 
     JLabel labelMainPl = new JLabel("Ваш набор: ");
     JLabel labelBazar = new JLabel("В колоде осталось: ");
     JTextArea bazarArea = new JTextArea();
-    JTextArea areaMain = new JTextArea();
     JTextArea currentSelectionLabel = new JTextArea("");
-
-    JRadioButton radio1 = new JRadioButton("1");
-    JRadioButton radio2 = new JRadioButton("2");
-    JRadioButton radio3 = new JRadioButton("3");
-    JRadioButton radio0 = new JRadioButton("0");
 
     GameProcess uiProcess = new GameProcess();
 
@@ -79,7 +64,7 @@ public class BasicWindow extends JFrame{
 
         uiProcess.beginGamePr(num);
 
-        initLists();
+        initLists(num);
 
         Box topPanel = createTopPanel();
         ui.add(topPanel, BorderLayout.NORTH);
@@ -89,7 +74,7 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        ui.add(new JScrollPane(beginGame()));
+        ui.add(new JScrollPane(UIDominoUtils.beginGame(uiProcess, columnNamesBoard, f, areas, bazarArea)));
 
         boardTableModel.fireTableDataChanged();
 
@@ -109,7 +94,7 @@ public class BasicWindow extends JFrame{
         buttonBeginStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boardTableModel = UIDominoUtils.beginGame(boardTableModel, uiProcess, f, radios, areas, bazarArea);
+                boardTableModel = UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
                 //ui.add(new JScrollPane(UIDominoUtils.nextStep(uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard)));
 
                 boardTableModel.fireTableDataChanged();
@@ -130,28 +115,15 @@ public class BasicWindow extends JFrame{
 
     }
 
-    private void initLists(){
-        areas.add(areaMain);
-        areas.add(areaPl1);
-        areas.add(areaPl2);
-        areas.add(areaPl3);
-
-        labels.add(labelMainPl);
-        labels.add(labelPl1);
-        labels.add(labelPl2);
-        labels.add(labelPl3);
-
+    private void initLists(int num){
         ButtonGroup group = new ButtonGroup();
-        group.add(radio1);
-        group.add(radio2);
-        group.add(radio3);
-        group.add(radio0);
-        radio0.setSelected(true);
-
-        radios.add(radio0);
-        radios.add(radio1);
-        radios.add(radio2);
-        radios.add(radio3);
+        for (int i = 0; i < num; i++){
+            areas.add(new JTextArea());
+            labels.add(new JLabel("Игрок " + i));
+            JRadioButton rb = new JRadioButton();
+            group.add(rb);
+            radios.add(rb);
+        }
     }
 
     private void initTableMainPl() {
@@ -174,18 +146,6 @@ public class BasicWindow extends JFrame{
             return false;
         }
 
-    }
-
-    private JTable beginGame(){
-        tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
-        tableGameBoard.setFont(f);
-        tableGameBoard.setRowHeight(45);
-
-        //вывести наборы плиток игроков
-        UIDominoUtils.outPacks(f, uiProcess, areas);
-        UIDominoUtils.outBazar(f, bazarArea, uiProcess);
-
-        return tableGameBoard;
     }
 
     private JTable mainPlayersTilesToTable(){
@@ -239,7 +199,7 @@ public class BasicWindow extends JFrame{
         Box mainBox = Box.createVerticalBox();
         mainBox.setBorder(new EmptyBorder(10, 10, 10, 10));
         mainBox.add(Box.createVerticalStrut(20));
-        mainBox.add(radio0);
+        mainBox.add(radios.get(0));
         mainBox.add(labelMainPl);
         mainBox.add(createMainPlayerPanel());
         bottomPanel.add(mainBox, BorderLayout.WEST);
