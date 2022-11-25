@@ -19,29 +19,29 @@ public class BasicWindow extends JFrame{
     private final JPanel mainPanel = new JPanel();
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
 
-    private String[][] board = new String[25][25];
+    private final String[][] board = new String[25][25];
     private String[][] data = new String[7][2];
 
-    private BoardTM boardTableModel = new BoardTM(board);
-    private MainTM mainPlTableModel = new MainTM(data);
+    private final BoardTM boardTableModel = new BoardTM(board);
+    private final MainTM mainPlTableModel = new MainTM(data);
 
-    private JTable tableGameBoard = new JTable(boardTableModel);
-    private JTable tableMain = new JTable(mainPlTableModel);
+    private final JTable tableGameBoard = new JTable(boardTableModel);
+    private final JTable tableMain = new JTable(mainPlTableModel);
 
-    private JButton buttonBeginStep =  new JButton("Begin");
-    private JButton buttonNextStep =  new JButton("Next Step");
-    private JButton buttonTakeFromBazar =  new JButton("Взять из базара");
+    private final JButton buttonBeginStep =  new JButton("Begin");
+    private final JButton buttonNextStep =  new JButton("Next Step");
+    private final JButton buttonTakeFromBazar =  new JButton("Взять из базара");
 
-    private JLabel labelMainPl = new JLabel("Ваш набор: ");
-    private JLabel labelBazar = new JLabel("В колоде осталось: ");
-    private JTextArea bazarArea = new JTextArea();
-    private JTextArea currentSelectionLabel = new JTextArea("");
+    private final JLabel labelMainPl = new JLabel("Ваш набор: ");
+    private final JLabel labelBazar = new JLabel("В колоде осталось: ");
+    private final JTextArea bazarArea = new JTextArea();
+    private final JTextArea currentSelectionLabel = new JTextArea("");
 
-    private GameProcess uiProcess = new GameProcess();
+    private final GameProcess uiProcess = new GameProcess();
 
-    private List<JTextArea> areas = new ArrayList<>();
-    private List<JLabel> labels = new ArrayList<>();
-    private List<JRadioButton> radios = new ArrayList<>();
+    private final List<JTextArea> areas = new ArrayList<>();
+    private final List<JLabel> labels = new ArrayList<>();
+    private final List<JRadioButton> radios = new ArrayList<>();
 
     private int size = 7;
 
