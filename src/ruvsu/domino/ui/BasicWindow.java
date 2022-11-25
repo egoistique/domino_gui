@@ -10,8 +10,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +18,7 @@ import java.util.List;
 
 public class BasicWindow extends JFrame{
     private JComponent ui  = new JPanel(new BorderLayout(5, 5));
-    JPanel mainPanel = new JPanel();
+    private JPanel mainPanel = new JPanel();
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
 
     String[][] board = new String[25][25];
@@ -121,9 +119,6 @@ public class BasicWindow extends JFrame{
                 System.out.println("update");
             }
         });
-
-
-
     }
 
     private void initLists(int num){

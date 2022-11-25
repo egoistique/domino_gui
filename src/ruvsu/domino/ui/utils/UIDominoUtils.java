@@ -173,18 +173,18 @@ public class UIDominoUtils {
     }
 
     //вывести набор главного игрока
-    public static JTable mainPlayersTilesToTable(GameProcess uiProcess, Font f, JTable tableMain) {
-        String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
-        String[] columnNames1 = new String[uiProcess.getPlayers().get(0).getPackOfTiles().size()];
-        for (int i = 0; i < uiProcess.getPlayers().get(0).getPackOfTiles().size(); i++) {
-            columnNames1[i] = String.valueOf(i);
-        }
-
-        tableMain = new JTable(tiles, columnNames1);
-        tableMain.setFont(f);
-        tableMain.setRowHeight(45);
-        return tableMain;
-    }
+//    public static JTable mainPlayersTilesToTable(GameProcess uiProcess, Font f, JTable tableMain) {
+//        String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
+//        String[] columnNames1 = new String[uiProcess.getPlayers().get(0).getPackOfTiles().size()];
+//        for (int i = 0; i < uiProcess.getPlayers().get(0).getPackOfTiles().size(); i++) {
+//            columnNames1[i] = String.valueOf(i);
+//        }
+//
+//        tableMain = new JTable(tiles, columnNames1);
+//        tableMain.setFont(f);
+//        tableMain.setRowHeight(45);
+//        return tableMain;
+//    }
 
     //следующий шаг
     public static BoardTM nextStep(BoardTM boardTM, GameProcess uiProcess, String code, Font f, List<JRadioButton> radios, String[] columnNamesBoard, List<JTextArea> areas, JTextArea bazarArea, JTable tableGameBoard) {
@@ -217,21 +217,6 @@ public class UIDominoUtils {
         }
         return boardTM;
     }
-
-    //
-    public static JTable mainPlayersTilesBeforeMoves(GameProcess uiProcess, Font f){
-        String[][] tiles = uiProcess.getPlayers().get(0).packToString(new GameBoard());
-        String[] columnNames1 = new String[uiProcess.getPlayers().get(0).getPackOfTiles().size()];
-        for (int i = 0; i < uiProcess.getPlayers().get(0).getPackOfTiles().size(); i++){
-            columnNames1[i] = String.valueOf(i);
-        }
-
-        JTable tableMain = new JTable(tiles, columnNames1);
-        tableMain.setFont(f);
-        tableMain.setRowHeight(45);
-        return tableMain;
-    }
-
 
     //окончание игры, вызов финального окна
     public static void gameOver(GameProcess uiProcess) {
