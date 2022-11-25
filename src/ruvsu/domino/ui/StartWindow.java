@@ -38,7 +38,6 @@ public class StartWindow extends JFrame{
         buttonOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                num = 2;
                 if(radio3.isSelected()) {
                     num = 3;
                 } else if (radio4.isSelected()) {
