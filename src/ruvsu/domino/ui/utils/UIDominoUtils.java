@@ -103,9 +103,6 @@ public class UIDominoUtils {
         Tile firstTile = uiProcess.getPl().makeAFirstMove();
         uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
 
-        //обновить gameBoard
-        boardTM.fireTableDataChanged();
-
         //включить радио кнопку у того, кто сделал первый ход
         int numOfCurrentRadio = defineFirstMover(uiProcess.getPlayers());
         if (numOfCurrentRadio == uiProcess.getPlayers().size() - 1) {
@@ -117,20 +114,24 @@ public class UIDominoUtils {
         outPacks(f, uiProcess, areas);
         outBazar(f, bazarArea, uiProcess);
 
+        boardTM.setBoard(uiProcess.board.getField());
+        boardTM.fireTableDataChanged();
+
         return boardTM;
     }
 
-    //начинало игры
-    public static JTable beginGame(GameProcess uiProcess, String[] columnNamesBoard, Font f, List<JTextArea> areas, JTextArea bazarArea){
-        JTable tableGameBoard = new JTable(uiProcess.board.getField(), columnNamesBoard);
-        tableGameBoard.setFont(f);
-        tableGameBoard.setRowHeight(45);
+    //начало игры
+    public static BoardTM beginGame(BoardTM boardTM, GameProcess uiProcess, String[] columnNamesBoard, Font f, List<JTextArea> areas, JTextArea bazarArea){
+//        JTable tableGameBoard = new JTable(boardTM);
+//        tableGameBoard.setFont(f);
+//        tableGameBoard.setRowHeight(45);
+
+        boardTM.fireTableDataChanged();
 
         //вывести наборы плиток игроков
         UIDominoUtils.outPacks(f, uiProcess, areas);
         UIDominoUtils.outBazar(f, bazarArea, uiProcess);
-
-        return tableGameBoard;
+        return boardTM;
     }
 
     //определить 1 игрока
@@ -187,7 +188,7 @@ public class UIDominoUtils {
 //    }
 
     //следующий шаг
-    public static BoardTM nextStep(BoardTM boardTM, GameProcess uiProcess, String code, Font f, List<JRadioButton> radios, String[] columnNamesBoard, List<JTextArea> areas, JTextArea bazarArea, JTable tableGameBoard) {
+    public static void nextStep(BoardTM boardTM, GameProcess uiProcess, String code, Font f, List<JRadioButton> radios,List<JTextArea> areas, JTextArea bazarArea) {
         //шаг игры
         if (!uiProcess.isGameOver() && uiProcess.getCheckFor() < uiProcess.getPlayers().size()) {
             //сделать ход
@@ -200,22 +201,19 @@ public class UIDominoUtils {
             } else numOfRadio++;
             radios.get(numOfRadio).setSelected(true);
 
-            //вывести состояние гейм борда
-            boardTM.fireTableDataChanged();
-
             System.out.println("обновление данных при ходе");
 
             //вывести в каждый текст филд текущие пак оф тайлсы
             UIDominoUtils.outPacks(f, uiProcess, areas);
             UIDominoUtils.outBazar(f, bazarArea, uiProcess);
 
+            boardTM.setBoard(uiProcess.board.getField());
+
             //проверить на гейм овер
             uiProcess.gameOverCheck(uiProcess.getPlayers());
-            return boardTM;
         } else {
             gameOver(uiProcess);
         }
-        return boardTM;
     }
 
     //окончание игры, вызов финального окна

@@ -21,34 +21,33 @@ public class BasicWindow extends JFrame{
     private JPanel mainPanel = new JPanel();
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
 
-    String[][] board = new String[25][25];
-    String[][] data = new String[2][7];
+    private String[][] board = new String[25][25];
+    private String[][] data = new String[2][7];
 
-    BoardTM boardTableModel = new BoardTM(board);
-    MainTM mainPlTableModel = new MainTM(data);
+    private BoardTM boardTableModel = new BoardTM(board);
+    private MainTM mainPlTableModel = new MainTM(data);
 
-    JTable tableGameBoard = new JTable(boardTableModel);
-    JTable tableMain = new JTable(mainPlTableModel);
+    private JTable tableGameBoard = new JTable(boardTableModel);
+    private JTable tableMain = new JTable(mainPlTableModel);
 
-    JButton buttonBeginStep =  new JButton("Begin");
-    JButton buttonNextStep =  new JButton("Next Step");
+    private JButton buttonBeginStep =  new JButton("Begin");
+    private JButton buttonNextStep =  new JButton("Next Step");
 
-    JLabel labelMainPl = new JLabel("Ваш набор: ");
-    JLabel labelBazar = new JLabel("В колоде осталось: ");
-    JTextArea bazarArea = new JTextArea();
-    JTextArea currentSelectionLabel = new JTextArea("");
+    private JLabel labelMainPl = new JLabel("Ваш набор: ");
+    private JLabel labelBazar = new JLabel("В колоде осталось: ");
+    private JTextArea bazarArea = new JTextArea();
+    private JTextArea currentSelectionLabel = new JTextArea("");
 
-    GameProcess uiProcess = new GameProcess();
+    private GameProcess uiProcess = new GameProcess();
 
-    String[] columnNamesBoard = new String[GameBoard.SIZE];
+    private String[] columnNamesBoard = new String[GameBoard.SIZE];
 
-    List<JTextArea> areas = new ArrayList<>();
-    List<JLabel> labels = new ArrayList<>();
-    List<JRadioButton> radios = new ArrayList<>();
+    private List<JTextArea> areas = new ArrayList<>();
+    private List<JLabel> labels = new ArrayList<>();
+    private List<JRadioButton> radios = new ArrayList<>();
 
-    int size = 7;
-    String[] columnNames1;
-
+    private int size = 7;
+    private String[] columnNames1;
 
     private static int num = 2;
 
@@ -77,9 +76,9 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        ui.add(new JScrollPane(UIDominoUtils.beginGame(uiProcess, columnNamesBoard, f, areas, bazarArea)));
+        boardTableModel = UIDominoUtils.beginGame(boardTableModel, uiProcess, columnNamesBoard, f, areas, bazarArea);
 
-        boardTableModel.fireTableDataChanged();
+        //ui.add(new JScrollPane(UIDominoUtils.beginGame(boardTableModel, uiProcess, columnNamesBoard, f, areas, bazarArea)));
 
         mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
 
@@ -88,7 +87,7 @@ public class BasicWindow extends JFrame{
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard);
+                UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
@@ -97,7 +96,7 @@ public class BasicWindow extends JFrame{
         buttonBeginStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
+                boardTableModel = UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }

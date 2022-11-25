@@ -3,9 +3,16 @@ package ruvsu.domino.ui.components;
 import javax.swing.table.AbstractTableModel;
 
 public class BoardTM extends AbstractTableModel {
-    String[][] board;
+    private String[][] board;
     public BoardTM(String[][] board) {
-        super();
+        this.board = board;
+    }
+
+    public String[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(String[][] board) {
         this.board = board;
     }
 
@@ -21,6 +28,7 @@ public class BoardTM extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return null;
+        return board[rowIndex][columnIndex];
     }
+
 }
