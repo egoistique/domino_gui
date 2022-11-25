@@ -2,6 +2,7 @@ package ruvsu.domino.ui;
 
 import ruvsu.domino.model.*;
 import ruvsu.domino.ui.components.BoardTM;
+import ruvsu.domino.ui.components.MainTM;
 import ruvsu.domino.ui.components.PlayerBox;
 import ruvsu.domino.ui.utils.UIDominoUtils;
 
@@ -21,12 +22,13 @@ public class BasicWindow extends JFrame{
     private final Font f = new Font("Monospaced", Font.PLAIN, 45);
 
     String[][] board = new String[25][25];
+    String[][] data = new String[2][7];
 
     BoardTM boardTableModel = new BoardTM(board);
-    TableModel mainPlTableModel = new MainPlTableModel();
+    MainTM mainPlTableModel = new MainTM(data);
 
     JTable tableGameBoard = new JTable(boardTableModel);
-    JTable tableMain;
+    JTable tableMain = new JTable(mainPlTableModel);
 
     JButton buttonBeginStep =  new JButton("Begin");
     JButton buttonNextStep =  new JButton("Next Step");
@@ -46,7 +48,7 @@ public class BasicWindow extends JFrame{
 
     int size = 7;
     String[] columnNames1;
-    String[][] data;
+
 
     private static int num = 2;
 
@@ -163,7 +165,6 @@ public class BasicWindow extends JFrame{
         for (int i = 0; i < GameBoard.SIZE; i++){
             columnNamesBoard[i] = String.valueOf(i);
         }
-        //tableGameBoard = new JTable(boardTableModel);
         tableGameBoard.setRowHeight(45);
         tableGameBoard.setFont(f);
         tableGameBoard.setModel(boardTableModel);
@@ -217,7 +218,6 @@ public class BasicWindow extends JFrame{
     private JPanel createMainPlayerPanel(){
         mainPanel.setLayout(new BorderLayout());
 
-        tableMain = new JTable();
         tableMain.setFont(f);
         tableMain.setRowHeight(45);
         tableMain.setModel(mainPlTableModel);
