@@ -8,6 +8,8 @@ import ruvsu.domino.ui.utils.UIDominoUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
@@ -89,6 +91,7 @@ public class BasicWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard);
+                boardTableModel.fireTableDataChanged();
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
         });
@@ -113,6 +116,14 @@ public class BasicWindow extends JFrame{
             }
         });
 
+        tableGameBoard.getModel().addTableModelListener(new TableModelListener() {
+            public void tableChanged(TableModelEvent e) {
+                System.out.println("update");
+            }
+        });
+
+
+
     }
 
     private void initLists(int num){
@@ -135,17 +146,6 @@ public class BasicWindow extends JFrame{
         for (int i = 0; i < size; i++) {
             columnNames1[i] = String.valueOf(i);
         }
-    }
-
-    public class MainPlTableModel extends DefaultTableModel {
-        MainPlTableModel( ) {
-            super(data, columnNames1);
-            System.out.println("Inside mainPlTableModel");
-        }
-        public boolean isCellEditable(int row,int cols){
-            return false;
-        }
-
     }
 
     private JTable mainPlayersTilesToTable(){
