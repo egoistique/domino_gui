@@ -85,8 +85,7 @@ public class BasicWindow extends JFrame{
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boardTableModel = UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard);
-                //ui.add(new JScrollPane(UIDominoUtils.nextStep(uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard)));
+                UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard);
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
         });
@@ -94,9 +93,7 @@ public class BasicWindow extends JFrame{
         buttonBeginStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boardTableModel = UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
-                //ui.add(new JScrollPane(UIDominoUtils.nextStep(uiProcess, code, f, radios, columnNamesBoard, areas, bazarArea, tableGameBoard)));
-
+                UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
                 mainPanel.add(new JScrollPane((mainPlayersTilesToTable())));
             }
