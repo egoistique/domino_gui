@@ -4,7 +4,7 @@ import ruvsu.domino.model.GameBoard;
 import ruvsu.domino.model.Heap;
 import ruvsu.domino.model.Player;
 import ruvsu.domino.model.Tile;
-import ruvsu.domino.ui.BoardTM;
+import ruvsu.domino.ui.components.BoardTM;
 import ruvsu.domino.ui.GameOverWindow;
 import ruvsu.domino.model.GameProcess;
 

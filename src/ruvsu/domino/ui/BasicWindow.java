@@ -1,6 +1,7 @@
 package ruvsu.domino.ui;
 
 import ruvsu.domino.model.*;
+import ruvsu.domino.ui.components.BoardTM;
 import ruvsu.domino.ui.components.PlayerBox;
 import ruvsu.domino.ui.utils.UIDominoUtils;
 

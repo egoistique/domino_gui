@@ -1,10 +1,10 @@
-package ruvsu.domino.ui;
+package ruvsu.domino.ui.components;
 
 import javax.swing.table.AbstractTableModel;
 
 public class BoardTM extends AbstractTableModel {
     String[][] board;
-    BoardTM(String[][] board) {
+    public BoardTM(String[][] board) {
         super();
         this.board = board;
     }
