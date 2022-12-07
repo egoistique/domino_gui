@@ -37,17 +37,38 @@ public class BasicWindow extends JFrame{
     private final JTextArea bazarArea = new JTextArea();
     private final JTextArea currentSelectionLabel = new JTextArea("");
 
-    private final GameProcess uiProcess = new GameProcess();
+    private final IGameProcess uiProcess = new LocalGameProcess();
 
     private final List<JTextArea> areas = new ArrayList<>();
     private final List<JLabel> labels = new ArrayList<>();
     private final List<JRadioButton> radios = new ArrayList<>();
+
+    public JComponent getUi() {
+        return ui;
+    }
+
+    public List<JTextArea> getAreas() {
+        return areas;
+    }
+
+    public List<JLabel> getLabels() {
+        return labels;
+    }
+
+    public List<JRadioButton> getRadios() {
+        return radios;
+    }
+
+    public ButtonGroup getButtonGroup() {
+        return buttonGroup;
+    }
 
     private int size = 7;
 
     private static int num = 2;
 
     private String code = "";
+    private ButtonGroup buttonGroup;
 
     public void setNum(int num) {
         BasicWindow.num = num;
@@ -72,9 +93,9 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        UIDominoUtils.beginGame(uiProcess, f, areas, bazarArea);
+        UIDominoUtils.beginGame((LocalGameProcess) uiProcess, f, areas, bazarArea);
 
-        UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+        UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
 
         mainPanel.add(new JScrollPane((tableMain)));
 
@@ -83,9 +104,9 @@ public class BasicWindow extends JFrame{
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.nextStep(boardTableModel, uiProcess, code, f, radios, areas, bazarArea);
+                UIDominoUtils.nextStep(boardTableModel, (LocalGameProcess) uiProcess, code, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
             }
         });
@@ -93,9 +114,9 @@ public class BasicWindow extends JFrame{
         buttonBeginStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, uiProcess, f, radios, areas, bazarArea);
+                UIDominoUtils.firstStep(boardTableModel, (LocalGameProcess) uiProcess, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
             }
         });
@@ -103,10 +124,10 @@ public class BasicWindow extends JFrame{
         buttonTakeFromBazar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.takeFromBazar(uiProcess, mainPlTableModel);
-                UIDominoUtils.mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+                UIDominoUtils.takeFromBazar((LocalGameProcess) uiProcess, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
-                UIDominoUtils.outBazar(f, bazarArea, uiProcess);
+                UIDominoUtils.outBazar(f, bazarArea, (LocalGameProcess) uiProcess);
             }
         });
 
@@ -124,12 +145,12 @@ public class BasicWindow extends JFrame{
     }
 
     private void initLists(int num){
-        ButtonGroup group = new ButtonGroup();
+        buttonGroup = new ButtonGroup();
         for (int i = 0; i < num; i++){
             areas.add(new JTextArea());
             labels.add(new JLabel("Игрок " + i));
             JRadioButton rb = new JRadioButton();
-            group.add(rb);
+            buttonGroup.add(rb);
             radios.add(rb);
         }
     }
@@ -144,7 +165,6 @@ public class BasicWindow extends JFrame{
     private JScrollPane createGameBoard(){
         tableGameBoard.setRowHeight(45);
         tableGameBoard.setFont(f);
-        tableGameBoard.setModel(boardTableModel);
 
         return new JScrollPane(tableGameBoard);
     }
@@ -199,7 +219,6 @@ public class BasicWindow extends JFrame{
 
         tableMain.setFont(f);
         tableMain.setRowHeight(45);
-        tableMain.setModel(mainPlTableModel);
 
         JScrollPane scrollPane = new JScrollPane(tableMain);
         mainPanel.add(scrollPane, BorderLayout.CENTER);

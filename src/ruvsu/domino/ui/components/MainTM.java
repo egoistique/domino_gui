@@ -26,5 +26,10 @@ public class MainTM extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         return mainPlayerTiles[rowIndex][columnIndex];
     }
+
+    @Override
+    public String getColumnName(int column) {
+        return "";
+    }
 }
 

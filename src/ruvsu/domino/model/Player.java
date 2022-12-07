@@ -5,8 +5,14 @@ import java.util.*;
 public class Player {
     //набор костей на руках игрока
     private List<Tile> packOfTiles;
+    private final String name;
 
-    public Player() {
+    public String getName() {
+        return name;
+    }
+
+    public Player(String name) {
+        this.name = name;
         packOfTiles = new ArrayList<>();
     }
 

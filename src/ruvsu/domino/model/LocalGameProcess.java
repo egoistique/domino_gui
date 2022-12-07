@@ -4,7 +4,7 @@ import ruvsu.domino.ui.utils.UIDominoUtils;
 
 import java.util.*;
 
-public class GameProcess {
+public class LocalGameProcess implements IGameProcess {
 
     private boolean gameOver = false;
 
@@ -21,31 +21,38 @@ public class GameProcess {
 
     private int checkFor = 0;
 
+    @Override
     public int getCheckFor() {
         return checkFor;
     }
 
+    @Override
     public Player getPl() {
         return pl;
     }
 
+    @Override
     public boolean isGameOver() {
         return gameOver;
     }
 
+    @Override
     public List<Player> getPlayers() {
         return players;
     }
 
+    @Override
     public Map<Coordinates, Integer> getActiveTiles() {
         return activeTiles;
     }
 
+    @Override
     public void setActiveTiles(Map<Coordinates, Integer> activeTiles) {
         this.activeTiles = activeTiles;
     }
 
     //начало игры, первый ход
+    @Override
     public Player beginGamePr(int numPl) {
         //создать игроков
         createPlayers(numPl);
@@ -59,6 +66,7 @@ public class GameProcess {
     }
 
     //шаг
+    @Override
     public Player gameStep(int view, String code) {
         //определить кто ходит
         pl = table.defineMover(players, pl);
@@ -102,11 +110,12 @@ public class GameProcess {
     //создать игроков
     private void createPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers; i++) {
-            players.add(new Player());
+            players.add(new Player("Player " + i));
         }
     }
 
     //проверить условие конца игры
+    @Override
     public void gameOverCheck(List<Player> players) {
         for (Player p : players) {
             if (p.getPackOfTiles().size() == 0) {

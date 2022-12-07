@@ -27,4 +27,8 @@ public class BoardTM extends AbstractTableModel {
         return board[rowIndex][columnIndex];
     }
 
+    @Override
+    public String getColumnName(int column) {
+        return "";
+    }
 }
