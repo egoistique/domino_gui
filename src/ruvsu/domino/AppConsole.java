@@ -1,7 +1,7 @@
 package ruvsu.domino;
 
 import ruvsu.domino.model.Asking;
-import ruvsu.domino.console.ConsoleGameProcess;
+import ruvsu.domino.client.console.ConsoleGameProcess;
 
 /**
 Играют от двух до четырёх человек. Для двух сдают по 7 камней, для 3 или 4 по 5 костей.

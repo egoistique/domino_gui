@@ -1,11 +1,12 @@
-package ruvsu.domino.console;
+package ruvsu.domino.client.console;
 
+import ruvsu.domino.model.Player;
 import ruvsu.domino.model.Tile;
 import ruvsu.domino.model.LocalGameProcess;
 
 public class ConsoleGameProcess {
 
-    private LocalGameProcess gameProcess = new LocalGameProcess();
+    private LocalGameProcess gameProcess = new LocalGameProcess(new Player());
     private Tile firstTile;
 
     public void processConsole(int numPl){

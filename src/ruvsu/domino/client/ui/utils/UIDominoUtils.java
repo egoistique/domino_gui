@@ -1,9 +1,9 @@
-package ruvsu.domino.ui.utils;
+package ruvsu.domino.client.ui.utils;
 
+import ruvsu.domino.client.ui.components.BoardTM;
+import ruvsu.domino.client.ui.components.MainTM;
 import ruvsu.domino.model.*;
-import ruvsu.domino.ui.components.BoardTM;
-import ruvsu.domino.ui.GameOverWindow;
-import ruvsu.domino.ui.components.MainTM;
+import ruvsu.domino.client.ui.GameOverWindow;
 
 import javax.swing.*;
 import java.awt.*;

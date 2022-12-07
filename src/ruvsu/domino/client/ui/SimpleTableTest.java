@@ -1,8 +1,6 @@
-package ruvsu.domino.ui;
+package ruvsu.domino.client.ui;
 
 import java.awt.*;
-
-import java.awt.event.*;
 
 import javax.swing.*;
 

@@ -24,7 +24,7 @@ public class Table {
         if (map.size() == 0) {
             //Логика, которая выбирает максимальное значение Tile у игрока
             int max = 0;
-            Player p1 = new Player("Player 1");
+            Player p1 = new Player();
             for (Player p : players) {
                 if (p.getPackOfTiles().get(0).first + p.getPackOfTiles().get(0).last > max){
                     max = p.getPackOfTiles().get(0).first + p.getPackOfTiles().get(0).last;

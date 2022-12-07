@@ -1,7 +1,4 @@
-package ruvsu.domino.ui.components;
-
-import ruvsu.domino.model.Player;
-import ruvsu.domino.ui.BasicWindow;
+package ruvsu.domino.client.ui.components;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

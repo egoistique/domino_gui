@@ -1,10 +1,10 @@
-package ruvsu.domino.ui;
+package ruvsu.domino.client.ui;
 
 import ruvsu.domino.model.*;
-import ruvsu.domino.ui.components.BoardTM;
-import ruvsu.domino.ui.components.MainTM;
-import ruvsu.domino.ui.components.PlayerBox;
-import ruvsu.domino.ui.utils.UIDominoUtils;
+import ruvsu.domino.client.ui.components.BoardTM;
+import ruvsu.domino.client.ui.components.MainTM;
+import ruvsu.domino.client.ui.components.PlayerBox;
+import ruvsu.domino.client.ui.utils.UIDominoUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -37,7 +37,7 @@ public class BasicWindow extends JFrame{
     private final JTextArea bazarArea = new JTextArea();
     private final JTextArea currentSelectionLabel = new JTextArea("");
 
-    private final IGameProcess uiProcess = new LocalGameProcess();
+    private final IGameProcess uiProcess = new LocalGameProcess(new Player());
 
     private final List<JTextArea> areas = new ArrayList<>();
     private final List<JLabel> labels = new ArrayList<>();
@@ -45,22 +45,6 @@ public class BasicWindow extends JFrame{
 
     public JComponent getUi() {
         return ui;
-    }
-
-    public List<JTextArea> getAreas() {
-        return areas;
-    }
-
-    public List<JLabel> getLabels() {
-        return labels;
-    }
-
-    public List<JRadioButton> getRadios() {
-        return radios;
-    }
-
-    public ButtonGroup getButtonGroup() {
-        return buttonGroup;
     }
 
     private int size = 7;

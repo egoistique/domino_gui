@@ -1,10 +1,10 @@
 package ruvsu.domino.model;
 
-import ruvsu.domino.ui.utils.UIDominoUtils;
+import ruvsu.domino.client.ui.utils.UIDominoUtils;
 
 import java.util.*;
 
-public class LocalGameProcess implements IGameProcess {
+public class LocalGameProcess extends AbstractGame {
 
     private boolean gameOver = false;
 
@@ -16,10 +16,13 @@ public class LocalGameProcess implements IGameProcess {
 
     public Scanner sc = new Scanner(System.in);
 
-    private Player pl;
     private Tile currTile;
 
     private int checkFor = 0;
+
+    public LocalGameProcess(Player pl) {
+        super(pl);
+    }
 
     @Override
     public int getCheckFor() {
@@ -110,7 +113,7 @@ public class LocalGameProcess implements IGameProcess {
     //создать игроков
     private void createPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers; i++) {
-            players.add(new Player("Player " + i));
+            players.add(new Player());
         }
     }
 

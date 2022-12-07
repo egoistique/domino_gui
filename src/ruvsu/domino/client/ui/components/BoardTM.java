@@ -1,4 +1,4 @@
-package ruvsu.domino.ui.components;
+package ruvsu.domino.client.ui.components;
 
 import javax.swing.table.AbstractTableModel;
 

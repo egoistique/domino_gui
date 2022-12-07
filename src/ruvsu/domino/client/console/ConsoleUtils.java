@@ -1,4 +1,4 @@
-package ruvsu.domino.console;
+package ruvsu.domino.client.console;
 
 import ruvsu.domino.model.GameBoard;
 import ruvsu.domino.model.Player;

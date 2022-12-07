@@ -1,6 +1,6 @@
 package ruvsu.domino;
 
-import ruvsu.domino.ui.StartWindow;
+import ruvsu.domino.client.ui.StartWindow;
 
 public class AppUi {
     public static void main(String[] args) {
