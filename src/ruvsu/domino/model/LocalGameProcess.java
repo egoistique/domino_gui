@@ -8,9 +8,7 @@ public class LocalGameProcess extends AbstractGame {
 
     private boolean gameOver = false;
 
-    public final Heap heap = new Heap();
     public final Table table = new Table();
-    public final GameBoard board = new GameBoard();
     private List<Player> players = new ArrayList<>();
     private Map<Coordinates, Integer> activeTiles = new HashMap<>();
 

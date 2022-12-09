@@ -3,78 +3,101 @@ package ruvsu.domino.client.network;
 import ruvsu.domino.client.ui.utils.UIDominoUtils;
 import ruvsu.domino.model.*;
 
+import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 public class NetworkGameProcess extends AbstractGame {
 
-//    private boolean gameOver = false;
-//
-//    public final Heap heap = new Heap();
-//    public final Table table = new Table();
-//    public final GameBoard board = new GameBoard();
-//    private List<Player> players = new ArrayList<>();
-//    private Map<Coordinates, Integer> activeTiles = new HashMap<>();
-//
-//    public Scanner sc = new Scanner(System.in);
+    private boolean gameOver = false;
 
-//    private Tile currTile;
+    public final Heap heap = new Heap();
+    public final Table table = new Table();
+    public final GameBoard board = new GameBoard();
+    private List<Player> players = new ArrayList<>();
+    private Map<Coordinates, Integer> activeTiles = new HashMap<>();
 
-//    private int checkFor = 0;
+    public Scanner sc = new Scanner(System.in);
 
+    private Tile currTile;
 
-    public NetworkGameProcess(Player pl) {
+    private int checkFor = 0;
+    Socket socket;
+    private BufferedReader in;
+    private PrintWriter out;
+
+    public NetworkGameProcess(Player pl, String server, int port) {
         super(pl);
+        try {
+            socket = new Socket(server, port);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            //TODO handle exception properly
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getCheckFor() {
-        return 0;
+        return checkFor;
     }
 
     @Override
     public Player getPl() {
-        return null;
+        return pl;
     }
 
     @Override
     public boolean isGameOver() {
-        return false;
+        return gameOver;
     }
 
     @Override
     public List<Player> getPlayers() {
-        return null;
+        return players;
     }
 
     @Override
     public Map<Coordinates, Integer> getActiveTiles() {
-        return null;
+        return activeTiles;
     }
 
     @Override
     public void setActiveTiles(Map<Coordinates, Integer> activeTiles) {
-
+        this.activeTiles = activeTiles;
     }
-
-//    //создать игроков
-//    private void createPlayers(int numPlayers) {
-//        for (int i = 0; i < numPlayers; i++) {
-//            players.add(new Player("Player " + i));
-//        }
-//    }
+    //создать игроков
+    private void createPlayers(int numPlayers) {
+        for (int i = 0; i < numPlayers; i++) {
+            players.add(new Player());
+        }
+    }
 
 
     @Override
     public Player beginGamePr(int numPl) {
+        createPlayers(numPl);
+
+        //раздать кости игрокам
+        table.givingTilesToPlayers(players, heap);
+
+        //определить кто ходит первым
+        pl = table.whoIsFirstMove(players);
+
         System.out.println("remote process started");
-        return null;
+
+        return pl;
     }
 
     @Override
     public Player gameStep(int view, String code) {
+        out.println(pl.getPackOfTiles().toString());
         //server.send(pl.getPackOfTiles());
         //server.getResponse();
         System.out.println(pl.getPackOfTiles().toString());
+
+
 
 //        //определить кто ходит
 //        pl = table.defineMover(players, pl);

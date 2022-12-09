@@ -70,10 +70,10 @@ public class StartWindow extends JFrame{
                     view = 2;
                 }
 
-                BasicWindow basicWindow = new BasicWindow();
-                basicWindow.setNum(num);
-                basicWindow.setView(view);
-                basicWindow.run();
+                BasicWindow basicWindow = new BasicWindow(num, view);
+//                basicWindow.setNum(num);
+//                basicWindow.setView(view);
+                basicWindow.run(basicWindow);
             }
         });
 

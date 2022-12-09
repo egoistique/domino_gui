@@ -33,10 +33,6 @@ public class BasicWindow extends JFrame{
     private final JButton buttonNextLocalStep =  new JButton("Next local Step");
     private final JButton buttonTakeFromBazarLocal =  new JButton("Взять из базара");
 
-    private final JButton buttonBeginRemote =  new JButton("Begin Remote");
-    private final JButton buttonNextRemoteStep =  new JButton("Next Remote Step");
-    private final JButton buttonTakeFromBazarRemote =  new JButton("Взять из базара");
-
     private final JLabel labelMainPl = new JLabel("Ваш набор: ");
     private final JLabel labelBazar = new JLabel("В колоде осталось: ");
     private final JTextArea bazarArea = new JTextArea();
@@ -56,21 +52,23 @@ public class BasicWindow extends JFrame{
 
     private int size = 7;
 
-    private static int num = 2;
-    private static int view = 1; //1 - локально; 2 - удаленно
+    private int num;
+    private int view; //1 - локально; 2 - удаленно
 
     private String code = "";
     private ButtonGroup buttonGroup;
 
-    public void setNum(int num) {
-        BasicWindow.num = num;
+    public void setNum(int num1) {
+        num = num1;
     }
 
-    public void setView(int view) {
-        BasicWindow.view = view;
+    public void setView(int view1) {
+        view = view1;
     }
 
-    BasicWindow() {
+    BasicWindow(int num1, int view1) {
+        num = num1;
+        view = view1;
         initUI();
     }
 
@@ -78,7 +76,7 @@ public class BasicWindow extends JFrame{
         ui.setBorder(new EmptyBorder(4, 4, 4, 4));
 
         if (view == 2){
-            process = new NetworkGameProcess(new Player());
+            process = new NetworkGameProcess(new Player(), "localhost", 9999);
         }
 
         process.beginGamePr(num);
@@ -93,9 +91,9 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        UIDominoUtils.beginGame((LocalGameProcess) process, f, areas, bazarArea);
+        UIDominoUtils.beginGame((AbstractGame) process, f, areas, bazarArea);
 
-        UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
+        UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
 
         mainPanel.add(new JScrollPane((tableMain)));
 
@@ -104,9 +102,9 @@ public class BasicWindow extends JFrame{
         buttonNextLocalStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.nextStep(boardTableModel, (LocalGameProcess) process, code, f, radios, areas, bazarArea);
+                UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
             }
         });
@@ -114,19 +112,9 @@ public class BasicWindow extends JFrame{
         buttonBeginLocal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, (LocalGameProcess) process, f, radios, areas, bazarArea);
+                UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
-                mainPlTableModel.fireTableDataChanged();
-            }
-        });
-
-        buttonBeginRemote.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, (LocalGameProcess) process, f, radios, areas, bazarArea);
-                boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
             }
         });
@@ -197,16 +185,6 @@ public class BasicWindow extends JFrame{
         boxLocalButtons.add(buttonTakeFromBazarLocal);
         topPanel.add(boxLocalButtons);
 
-//        Box boxRemoteButtons = Box.createVerticalBox();
-//        boxRemoteButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
-//        buttonNextRemoteStep.setPreferredSize(new Dimension(200, 70));
-//        buttonBeginRemote.setPreferredSize(new Dimension(200, 70));
-//        buttonTakeFromBazarRemote.setPreferredSize(new Dimension(200, 70));
-//        boxRemoteButtons.add(buttonNextRemoteStep);
-//        boxRemoteButtons.add(buttonBeginRemote);
-//        boxRemoteButtons.add(buttonTakeFromBazarRemote);
-//        topPanel.add(boxRemoteButtons);
-
         return topPanel;
     }
 
@@ -266,7 +244,7 @@ public class BasicWindow extends JFrame{
         return ui;
     }
 
-    public void run(){
+    public void run(BasicWindow basicWindow){
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -274,13 +252,13 @@ public class BasicWindow extends JFrame{
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception useDefault) {
                 }
-                BasicWindow o = new BasicWindow();
+//                BasicWindow o = new BasicWindow();
 
-                JFrame f = new JFrame(o.getClass().getSimpleName());
+                JFrame f = new JFrame(basicWindow.getClass().getSimpleName());
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setLocationByPlatform(true);
 
-                f.setContentPane(o.getUI());
+                f.setContentPane(basicWindow.getUI());
                 f.pack();
                 f.setSize(1600, 1050);
                 f.setVisible(true);
