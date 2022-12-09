@@ -1,5 +1,6 @@
 package ruvsu.domino.client.ui;
 
+import ruvsu.domino.client.network.NetworkGameProcess;
 import ruvsu.domino.model.*;
 import ruvsu.domino.client.ui.components.BoardTM;
 import ruvsu.domino.client.ui.components.MainTM;
@@ -28,16 +29,22 @@ public class BasicWindow extends JFrame{
     private final JTable tableGameBoard = new JTable(boardTableModel);
     private final JTable tableMain = new JTable(mainPlTableModel);
 
-    private final JButton buttonBeginStep =  new JButton("Begin");
-    private final JButton buttonNextStep =  new JButton("Next Step");
-    private final JButton buttonTakeFromBazar =  new JButton("Взять из базара");
+    private final JButton buttonBeginLocal =  new JButton("Begin local");
+    private final JButton buttonNextLocalStep =  new JButton("Next local Step");
+    private final JButton buttonTakeFromBazarLocal =  new JButton("Взять из базара");
+
+    private final JButton buttonBeginRemote =  new JButton("Begin Remote");
+    private final JButton buttonNextRemoteStep =  new JButton("Next Remote Step");
+    private final JButton buttonTakeFromBazarRemote =  new JButton("Взять из базара");
 
     private final JLabel labelMainPl = new JLabel("Ваш набор: ");
     private final JLabel labelBazar = new JLabel("В колоде осталось: ");
     private final JTextArea bazarArea = new JTextArea();
     private final JTextArea currentSelectionLabel = new JTextArea("");
 
-    private final IGameProcess uiProcess = new LocalGameProcess(new Player());
+    private IGameProcess process = new LocalGameProcess(new Player());
+
+    //private final IGameProcess networkProcess = new NetworkGameProcess(new Player());
 
     private final List<JTextArea> areas = new ArrayList<>();
     private final List<JLabel> labels = new ArrayList<>();
@@ -50,12 +57,17 @@ public class BasicWindow extends JFrame{
     private int size = 7;
 
     private static int num = 2;
+    private static int view = 1; //1 - локально; 2 - удаленно
 
     private String code = "";
     private ButtonGroup buttonGroup;
 
     public void setNum(int num) {
         BasicWindow.num = num;
+    }
+
+    public void setView(int view) {
+        BasicWindow.view = view;
     }
 
     BasicWindow() {
@@ -65,7 +77,11 @@ public class BasicWindow extends JFrame{
     public void initUI() {
         ui.setBorder(new EmptyBorder(4, 4, 4, 4));
 
-        uiProcess.beginGamePr(num);
+        if (view == 2){
+            process = new NetworkGameProcess(new Player());
+        }
+
+        process.beginGamePr(num);
 
         initLists(num);
 
@@ -77,41 +93,51 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        UIDominoUtils.beginGame((LocalGameProcess) uiProcess, f, areas, bazarArea);
+        UIDominoUtils.beginGame((LocalGameProcess) process, f, areas, bazarArea);
 
-        UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
+        UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
 
         mainPanel.add(new JScrollPane((tableMain)));
 
         initTableMainPl();
 
-        buttonNextStep.addActionListener(new ActionListener() {
+        buttonNextLocalStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.nextStep(boardTableModel, (LocalGameProcess) uiProcess, code, f, radios, areas, bazarArea);
+                UIDominoUtils.nextStep(boardTableModel, (LocalGameProcess) process, code, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
             }
         });
 
-        buttonBeginStep.addActionListener(new ActionListener() {
+        buttonBeginLocal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, (LocalGameProcess) uiProcess, f, radios, areas, bazarArea);
+                UIDominoUtils.firstStep(boardTableModel, (LocalGameProcess) process, f, radios, areas, bazarArea);
                 boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
             }
         });
 
-        buttonTakeFromBazar.addActionListener(new ActionListener() {
+        buttonBeginRemote.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.takeFromBazar((LocalGameProcess) uiProcess, mainPlTableModel);
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) uiProcess, mainPlTableModel);
+                UIDominoUtils.firstStep(boardTableModel, (LocalGameProcess) process, f, radios, areas, bazarArea);
+                boardTableModel.fireTableDataChanged();
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
-                UIDominoUtils.outBazar(f, bazarArea, (LocalGameProcess) uiProcess);
+            }
+        });
+
+        buttonTakeFromBazarLocal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UIDominoUtils.takeFromBazar((LocalGameProcess) process, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
+                mainPlTableModel.fireTableDataChanged();
+                UIDominoUtils.outBazar(f, bazarArea, (LocalGameProcess) process);
             }
         });
 
@@ -157,19 +183,29 @@ public class BasicWindow extends JFrame{
         Box topPanel = Box.createHorizontalBox();
         topPanel.add(Box.createHorizontalStrut(20));
 
-        for(int i = 1; i < uiProcess.getPlayers().size(); i++){
+        for(int i = 1; i < process.getPlayers().size(); i++){
             topPanel.add(PlayerBox.createPlBox(i, radios, labels, areas));
         }
 
-        Box boxButtons = Box.createVerticalBox();
-        boxButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
-        buttonNextStep.setPreferredSize(new Dimension(200, 70));
-        buttonBeginStep.setPreferredSize(new Dimension(200, 70));
-        buttonTakeFromBazar.setPreferredSize(new Dimension(200, 70));
-        boxButtons.add(buttonBeginStep);
-        boxButtons.add(buttonNextStep);
-        boxButtons.add(buttonTakeFromBazar);
-        topPanel.add(boxButtons);
+        Box boxLocalButtons = Box.createVerticalBox();
+        boxLocalButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
+        buttonNextLocalStep.setPreferredSize(new Dimension(200, 70));
+        buttonBeginLocal.setPreferredSize(new Dimension(200, 70));
+        buttonTakeFromBazarLocal.setPreferredSize(new Dimension(200, 70));
+        boxLocalButtons.add(buttonBeginLocal);
+        boxLocalButtons.add(buttonNextLocalStep);
+        boxLocalButtons.add(buttonTakeFromBazarLocal);
+        topPanel.add(boxLocalButtons);
+
+//        Box boxRemoteButtons = Box.createVerticalBox();
+//        boxRemoteButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
+//        buttonNextRemoteStep.setPreferredSize(new Dimension(200, 70));
+//        buttonBeginRemote.setPreferredSize(new Dimension(200, 70));
+//        buttonTakeFromBazarRemote.setPreferredSize(new Dimension(200, 70));
+//        boxRemoteButtons.add(buttonNextRemoteStep);
+//        boxRemoteButtons.add(buttonBeginRemote);
+//        boxRemoteButtons.add(buttonTakeFromBazarRemote);
+//        topPanel.add(boxRemoteButtons);
 
         return topPanel;
     }
