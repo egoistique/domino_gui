@@ -6,13 +6,8 @@ import java.util.*;
 
 public class LocalGameProcess extends AbstractGame {
 
-    private boolean gameOver = false;
-
-    public final Table table = new Table();
     private List<Player> players = new ArrayList<>();
     private Map<Coordinates, Integer> activeTiles = new HashMap<>();
-
-    public Scanner sc = new Scanner(System.in);
 
     private Tile currTile;
 

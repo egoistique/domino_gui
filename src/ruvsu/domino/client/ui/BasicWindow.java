@@ -29,9 +29,9 @@ public class BasicWindow extends JFrame{
     private final JTable tableGameBoard = new JTable(boardTableModel);
     private final JTable tableMain = new JTable(mainPlTableModel);
 
-    private final JButton buttonBeginLocal =  new JButton("Begin local");
-    private final JButton buttonNextLocalStep =  new JButton("Next local Step");
-    private final JButton buttonTakeFromBazarLocal =  new JButton("Взять из базара");
+    private final JButton buttonBegin =  new JButton("Begin");
+    private final JButton buttonNextStep =  new JButton("Next Step");
+    private final JButton buttonTakeFromBazar =  new JButton("Взять из базара");
 
     private final JLabel labelMainPl = new JLabel("Ваш набор: ");
     private final JLabel labelBazar = new JLabel("В колоде осталось: ");
@@ -39,8 +39,6 @@ public class BasicWindow extends JFrame{
     private final JTextArea currentSelectionLabel = new JTextArea("");
 
     private IGameProcess process = new LocalGameProcess(new Player());
-
-    //private final IGameProcess networkProcess = new NetworkGameProcess(new Player());
 
     private final List<JTextArea> areas = new ArrayList<>();
     private final List<JLabel> labels = new ArrayList<>();
@@ -57,14 +55,6 @@ public class BasicWindow extends JFrame{
 
     private String code = "";
     private ButtonGroup buttonGroup;
-
-    public void setNum(int num1) {
-        num = num1;
-    }
-
-    public void setView(int view1) {
-        view = view1;
-    }
 
     BasicWindow(int num1, int view1) {
         num = num1;
@@ -99,7 +89,7 @@ public class BasicWindow extends JFrame{
 
         initTableMainPl();
 
-        buttonNextLocalStep.addActionListener(new ActionListener() {
+        buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
@@ -109,7 +99,7 @@ public class BasicWindow extends JFrame{
             }
         });
 
-        buttonBeginLocal.addActionListener(new ActionListener() {
+        buttonBegin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
@@ -119,13 +109,13 @@ public class BasicWindow extends JFrame{
             }
         });
 
-        buttonTakeFromBazarLocal.addActionListener(new ActionListener() {
+        buttonTakeFromBazar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.takeFromBazar((LocalGameProcess) process, mainPlTableModel);
-                UIDominoUtils.mainPlayersTilesToTable((LocalGameProcess) process, mainPlTableModel);
+                UIDominoUtils.takeFromBazar((AbstractGame) process, mainPlTableModel);
+                UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
-                UIDominoUtils.outBazar(f, bazarArea, (LocalGameProcess) process);
+                UIDominoUtils.outBazar(f, bazarArea, (AbstractGame) process);
             }
         });
 
@@ -177,12 +167,12 @@ public class BasicWindow extends JFrame{
 
         Box boxLocalButtons = Box.createVerticalBox();
         boxLocalButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
-        buttonNextLocalStep.setPreferredSize(new Dimension(200, 70));
-        buttonBeginLocal.setPreferredSize(new Dimension(200, 70));
-        buttonTakeFromBazarLocal.setPreferredSize(new Dimension(200, 70));
-        boxLocalButtons.add(buttonBeginLocal);
-        boxLocalButtons.add(buttonNextLocalStep);
-        boxLocalButtons.add(buttonTakeFromBazarLocal);
+        buttonNextStep.setPreferredSize(new Dimension(200, 70));
+        buttonBegin.setPreferredSize(new Dimension(200, 70));
+        buttonTakeFromBazar.setPreferredSize(new Dimension(200, 70));
+        boxLocalButtons.add(buttonBegin);
+        boxLocalButtons.add(buttonNextStep);
+        boxLocalButtons.add(buttonTakeFromBazar);
         topPanel.add(boxLocalButtons);
 
         return topPanel;

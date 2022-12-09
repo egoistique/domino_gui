@@ -54,4 +54,8 @@ public class ConsoleUtils {
             System.out.println();
         }
     }
+
+    public static int tileToString(Tile tile, GameBoard field) {
+        return field.getCode(field.tileImages, tile);
+    }
 }
