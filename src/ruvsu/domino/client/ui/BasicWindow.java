@@ -57,13 +57,13 @@ public class BasicWindow extends JFrame{
     private String code = "";
     private ButtonGroup buttonGroup;
 
-    BasicWindow(int num1, int view1) throws IOException {
+    BasicWindow(int num1, int view1) throws IOException, ClassNotFoundException {
         num = num1;
         view = view1;
         initUI();
     }
 
-    public void initUI() throws IOException {
+    public void initUI() throws IOException, ClassNotFoundException {
         ui.setBorder(new EmptyBorder(4, 4, 4, 4));
 
         if (view == 3){
@@ -162,6 +162,7 @@ public class BasicWindow extends JFrame{
         Box topPanel = Box.createHorizontalBox();
         topPanel.add(Box.createHorizontalStrut(20));
 
+        System.out.println();
         for(int i = 1; i < process.getPlayers().size(); i++){
             topPanel.add(PlayerBox.createPlBox(i, radios, labels, areas));
         }

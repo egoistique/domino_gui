@@ -21,12 +21,20 @@ public class NetworkGameProcess extends AbstractGame {
     private BufferedReader in;
     private PrintWriter out;
 
+    ObjectOutputStream outObject;
+    ObjectInputStream inObject;
+
     public NetworkGameProcess(Player pl, String server, int port) {
         super(pl);
         try {
             socket = new Socket(server, port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+
+            outObject = new ObjectOutputStream(socket.getOutputStream());
+            inObject = new ObjectInputStream(socket.getInputStream());
+
+
         } catch (IOException e) {
             //TODO handle exception properly
             e.printStackTrace();
@@ -62,38 +70,44 @@ public class NetworkGameProcess extends AbstractGame {
     public void setActiveTiles(Map<Coordinates, Integer> activeTiles) {
         this.activeTiles = activeTiles;
     }
-    //создать игроков
-    @Override
-    public List<Player> createPlayers(int numPlayers) throws IOException {
-        //послать запрос на сервер о создании игроков
-        out.println("createPlayers" + numPlayers);
-        //получив инфо о игроках
-        String s;
-        if((s = in.readLine()) != null){
-            if(s.equals("players created")){
-                players = Helping.players;
-            }
-        }
-        return players;
-    }
 
-    @Override
-    public Table giving(int numPlayers) {
-//        //послать запрос на сервер о раздаче
+    //создать игроков
+//    @Override
+//    public List<Player> createPlayers(int numPlayers) throws IOException {
+//        //послать запрос на сервер о создании игроков
 //        out.println("createPlayers" + numPlayers);
-//        //получив инфо раздаче
+//        //получив инфо о игроках
 //        String s;
 //        if((s = in.readLine()) != null){
 //            if(s.equals("players created")){
 //                players = Helping.players;
 //            }
 //        }
-//
+//        return players;
+//    }
 
-        return table;
+//    @Override
+//    public List<Player> giving() throws IOException {
+//        //послать запрос на сервер о раздаче
+//        out.println("give");
+//        //получить инфо o раздаче
+//        String s;
+//        if((s = in.readLine()) != null){
+//            if(s.equals("given")){
+//                players = Helping.players;
+//                heap = Helping.heap;
+//            }
+//        }
+//
+//        return players;
+//    }
+
+    @Override
+    public Heap getHeap() {
+        return heap;
     }
 
-/**процесс, который хранит домино, юзеров, поле должен  запускаться на СЕРВЕРЕ (+)
+    /**процесс, который хранит домино, юзеров, поле должен  запускаться на СЕРВЕРЕ (+)
  *
  * на КЛИЕНТЕ запускаем networkGameProcess (+)
  *
@@ -124,23 +138,22 @@ public class NetworkGameProcess extends AbstractGame {
  *
  * */
     @Override
-    public Player beginGamePr(int view, int numPl) throws IOException {
-        //создать игроков
-        createPlayers(numPl);
-
-//        //послать запрос на сервер
-//        out.println(numPl);
-//        //получив инфо о розданных костях
-//        in.readLine()
-
-
-        //раздать кости игрокам
-        table.givingTilesToPlayers(players, heap);
-
-        //послать запрос на сервер, получив инфо кто ходит первым и вернуть
-        pl = table.whoIsFirstMove(players);
-
+    public Player beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException {
         System.out.println("remote process started");
+
+        out.println("begin" + numPl);
+        String s;
+        if((s = in.readLine()) != null){
+            if(s.equals("began")){
+                System.out.println("successful beginning");
+
+                //TODO обновить данные на клиенте, либо с сервера каким то образом их сюда отправить
+                pl = (Player) inObject.readObject();
+                players = (List<Player>) inObject.readObject();
+               // heap = help.heap;
+
+            }
+        }
 
         return pl;
     }
@@ -189,4 +202,5 @@ public class NetworkGameProcess extends AbstractGame {
     public void gameOverCheck(List<Player> players) {
 
     }
+
 }

@@ -71,15 +71,18 @@ public class StartWindow extends JFrame{
                     view = 3;
                 }
 
-                BasicWindow basicWindow = null;
+                BasicWindow basicWindow;
                 try {
                     basicWindow = new BasicWindow(num, view);
+                    basicWindow.run(basicWindow);
                 } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
 //                basicWindow.setNum(num);
 //                basicWindow.setView(view);
-                basicWindow.run(basicWindow);
+//                basicWindow.run(basicWindow);
             }
         });
 

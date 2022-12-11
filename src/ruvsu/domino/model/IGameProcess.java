@@ -18,7 +18,7 @@ public interface IGameProcess {
     void setActiveTiles(Map<Coordinates, Integer> activeTiles);
 
     //начало игры, первый ход
-    Player beginGamePr(int view, int numPl) throws IOException;
+    Player beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException;
 
     //шаг
     Player gameStep(int view, String code);
@@ -26,7 +26,9 @@ public interface IGameProcess {
     //проверить условие конца игры
     void gameOverCheck(List<Player> players);
 
-    List<Player> createPlayers(int numPlayers) throws IOException;
+//    List<Player> createPlayers(int numPlayers) throws IOException;
+//
+//    List<Player> giving() throws IOException;
 
-    Table giving(int numPlayers);
+    Heap getHeap();
 }
