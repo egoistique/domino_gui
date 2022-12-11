@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -51,25 +52,25 @@ public class BasicWindow extends JFrame{
     private int size = 7;
 
     private int num;
-    private int view; //1 - локально; 2 - удаленно
+    private int view; //2 - локально; 3 - удаленно
 
     private String code = "";
     private ButtonGroup buttonGroup;
 
-    BasicWindow(int num1, int view1) {
+    BasicWindow(int num1, int view1) throws IOException {
         num = num1;
         view = view1;
         initUI();
     }
 
-    public void initUI() {
+    public void initUI() throws IOException {
         ui.setBorder(new EmptyBorder(4, 4, 4, 4));
 
-        if (view == 2){
+        if (view == 3){
             process = new NetworkGameProcess(new Player(), "localhost", 9999);
         }
 
-        process.beginGamePr(num);
+        process.beginGamePr(view, num);
 
         initLists(num);
 

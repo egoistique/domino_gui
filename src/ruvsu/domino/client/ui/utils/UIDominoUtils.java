@@ -117,7 +117,7 @@ public class UIDominoUtils {
         return boardTM;
     }
 
-    //начало игры
+    //вывести начальное состояние игроков
     public static void beginGame(AbstractGame uiProcess, Font f, List<JTextArea> areas, JTextArea bazarArea){
         //вывести наборы плиток игроков
         UIDominoUtils.outPacks(f, uiProcess, areas);

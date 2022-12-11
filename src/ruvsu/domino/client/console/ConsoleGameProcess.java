@@ -10,7 +10,7 @@ public class ConsoleGameProcess {
     private Tile firstTile;
 
     public void processConsole(int numPl){
-        gameProcess.beginGamePr(numPl);
+        gameProcess.beginGamePr(1, numPl);
 
         System.out.println("до 1 хода распределение костей такое: ");
         ConsoleUtils.output(gameProcess.getPlayers(), gameProcess.board);

@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class StartWindow extends JFrame{
     private final JButton buttonOk =  new JButton("OK");
@@ -17,7 +18,7 @@ public class StartWindow extends JFrame{
     private final JLabel chooserLabel = new JLabel("Выберите вид ");
 
     private int num = 2;
-    private int view = 1;
+    private int view = 2;
 
     public StartWindow(){
         super("start");
@@ -67,10 +68,15 @@ public class StartWindow extends JFrame{
                 }
 
                 if(radioRemote.isSelected()){
-                    view = 2;
+                    view = 3;
                 }
 
-                BasicWindow basicWindow = new BasicWindow(num, view);
+                BasicWindow basicWindow = null;
+                try {
+                    basicWindow = new BasicWindow(num, view);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 //                basicWindow.setNum(num);
 //                basicWindow.setView(view);
                 basicWindow.run(basicWindow);
