@@ -1,6 +1,8 @@
 package ruvsu.domino.model;
 
-public class Tile {
+import java.io.Serializable;
+
+public class Tile implements Serializable {
 
     public final int first;
     public final int last;

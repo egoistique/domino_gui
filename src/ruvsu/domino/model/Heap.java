@@ -1,10 +1,11 @@
 package ruvsu.domino.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Heap {
+public class Heap implements Serializable {
     //базар, откуда добираются кости
     private List<Tile> bazar;
 

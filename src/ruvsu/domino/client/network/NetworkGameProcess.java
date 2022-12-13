@@ -147,21 +147,28 @@ public class NetworkGameProcess extends AbstractGame {
             if(s.equals("began")){
                 System.out.println("successful beginning");
 
-                //TODO обновить данные на клиенте, либо с сервера каким то образом их сюда отправить
-                pl = (Player) inObject.readObject();
-                players = (List<Player>) inObject.readObject();
-               // heap = help.heap;
+                //обновить данные на клиенте
+                Object o;
+                if((o = inObject.readObject()) != null){
+                    pl = (Player) o;
+                }
 
+                Object o1;
+                if((o1 = inObject.readObject()) != null){
+                    heap = (Heap) o1;
+                }
+
+                List<Player> pls;
+                pls = (List) inObject.readObject();
+                pls.forEach(System.out::println);
+                players = pls;
             }
         }
-
         return pl;
     }
 
     @Override
     public Player gameStep(int view, String code) {
-//        socket.send(pl.getPackOfTiles());
-//        socket.getResponse();
 
         //послать запрос на сервер, получив инфо кто ходит
         //определить кто ходит

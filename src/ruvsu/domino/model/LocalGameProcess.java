@@ -54,18 +54,14 @@ public class LocalGameProcess extends AbstractGame {
     //начало игры, первый ход
     @Override
     public Player beginGamePr(int view, int numPl) {
-       // if(view != 3){
-            //создать игроков
-            createPlayers(numPl);
+        //создать игроков
+        createPlayers(numPl);
 
-            //раздать кости игрокам
-            table.givingTilesToPlayers(players, heap);
+        //раздать кости игрокам
+        table.givingTilesToPlayers(players, heap);
 
-            //определить кто ходит первым
-            pl = table.whoIsFirstMove(players);
-        //} else{
-
-        //}
+        //определить кто ходит первым
+        pl = table.whoIsFirstMove(players);
         return pl;
     }
 
@@ -119,18 +115,6 @@ public class LocalGameProcess extends AbstractGame {
         }
         return players;
     }
-//
-//    @Override
-//    public List<Player> giving() {
-//        table.givingTilesToPlayers(players, heap);
-//        return players;
-//    }
-//
-//    @Override
-//    public List<Player> defineFirst() {
-//        table.givingTilesToPlayers(players, heap);
-//        return players;
-//    }
 
     //проверить условие конца игры
     @Override

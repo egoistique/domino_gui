@@ -2,6 +2,7 @@ package ruvsu.domino.server;
 
 import ruvsu.domino.client.network.Helping;
 import ruvsu.domino.client.network.NetworkGameProcess;
+import ruvsu.domino.model.Heap;
 import ruvsu.domino.model.IGameProcess;
 import ruvsu.domino.model.LocalGameProcess;
 import ruvsu.domino.model.Player;
@@ -52,14 +53,15 @@ public class GameServer {
                 //если запрос на создание игрков, вызываем у локального процесса метод createPlayers
                 if(request.contains("begin")){
                     System.out.println("successful get command");
-                    help.pl = process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
-                    help.players = process.getPlayers();
-                    help.heap = process.getHeap();
+                    Player pl = process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
+                    List<Player> players = process.getPlayers();
+                    Heap heap = process.getHeap();
                     //отдаем команду что они созданы
                     out.println("began");
 
-                    outObject.writeObject(help.pl);
-                    outObject.writeObject(help.players);
+                    outObject.writeObject(pl);
+                    outObject.writeObject(heap);
+                    outObject.writeObject(players);
                 }
 
 

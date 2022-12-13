@@ -1,8 +1,9 @@
 package ruvsu.domino.model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
     //набор костей на руках игрока
     private List<Tile> packOfTiles;
 
