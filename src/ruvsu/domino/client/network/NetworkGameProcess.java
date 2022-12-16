@@ -118,8 +118,6 @@ public class NetworkGameProcess extends AbstractGame {
         String s;
         if((s = in.readLine()) != null){
             if(s.equals("began")){
-                System.out.println("successful beginning");
-
                 //обновить данные на клиенте
                 Object o;
                 if((o = inObject.readObject()) != null){
@@ -147,7 +145,7 @@ public class NetworkGameProcess extends AbstractGame {
         out.println("FIRST_STEP");
         String s;
         if((s = in.readLine()) != null){
-            if(s.equals("FIRST_STEP_COMPLETE")){
+            if(s.contains("FIRST_STEP_COMPLETE")){
                 //обновить данные на клиенте
                 Object o;
                 if((o = inObject.readObject()) != null){
@@ -174,14 +172,14 @@ public class NetworkGameProcess extends AbstractGame {
         //определить кто ходит
 
 
-        pl = table.defineMover(players, pl);
+//        pl = table.defineMover(players, pl);
 
         //получить кость которой игрок хочет походить
-        if (UIDominoUtils.listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles()) && !code.equals("")) {
-            currTile = pl.makeInteractiveMove(code, board);
-
-            out.println(Character.toChars(ConsoleUtils.getCodeOfTile(currTile, board)));
-        }
+//        if (UIDominoUtils.listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles()) && !code.equals("")) {
+//            currTile = pl.makeInteractiveMove(code, board);
+//
+//            out.println(Character.toChars(ConsoleUtils.getCodeOfTile(currTile, board)));
+//        }
 //        } else{
 //            currTile = pl.makeAMove(activeTiles, heap);
 //        }
@@ -190,12 +188,12 @@ public class NetworkGameProcess extends AbstractGame {
         //клиент это обновляет на экране
         //положить на стол кость
 
-        out.println("NEXT_STEP");
-        outObject.reset();
-        outObject.writeObject(currTile);
+        out.println("NEXT_STEP" + code);
+//        outObject.reset();
+//        outObject.writeObject(code);
         String s;
         if((s = in.readLine()) != null){
-            if(s.equals("NEXT_STEP_COMPLETE")){
+            if(s.contains("NEXT_STEP_COMPLETE")){
                 //обновить данные на клиенте
                 Object o;
                 if((o = inObject.readObject()) != null){

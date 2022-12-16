@@ -59,14 +59,15 @@ public class GameServer {
                     outObject.writeObject(heap);
                     outObject.writeObject(players);
 
-                    outObject.flush();
+                    //outObject.flush();
                 }
                 if(request.contains("FIRST_STEP")){
                     process.firstStep();
 
-                    List<Player> players = process.getPlayers();
-                    Heap heap = process.getHeap();
                     GameBoard gameBoard = process.getBoard();
+                    Heap heap = process.getHeap();
+                    List<Player> players = process.getPlayers();
+
                     //отдаем команду что шаг сделан
                     out.println("FIRST_STEP_COMPLETE");
 
@@ -74,19 +75,10 @@ public class GameServer {
                     outObject.writeObject(gameBoard);
                     outObject.writeObject(heap);
                     outObject.writeObject(players);
-
-                    outObject.flush();
                 }
                 if(request.contains("NEXT_STEP")){
-                    process.firstStep();
-
-                    Object t;
-                    Tile currTile = null;
-                    if((t = inObject.readObject()) != null){
-                        currTile = (Tile) t;
-                    }
-
-                    String code = String.valueOf(ConsoleUtils.getCodeOfTile(currTile, process.getBoard()));
+                    String code = request;
+                    code = code.replace("NEXT_STEP", "");
 
                     process.gameStep(3, code);
 
@@ -101,7 +93,6 @@ public class GameServer {
                     outObject.writeObject(heap);
                     outObject.writeObject(players);
 
-                    outObject.flush();
                 }
                 System.out.println(request);
             }

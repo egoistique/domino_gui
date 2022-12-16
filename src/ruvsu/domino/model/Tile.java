@@ -15,8 +15,4 @@ public class Tile implements Serializable {
     public int getSum() {
         return first + last;
     }
-//
-//    public String getCode(GameBoard field){
-//        field.getCode(pl.getPackOfTiles().get(i));
-//    }
 }
