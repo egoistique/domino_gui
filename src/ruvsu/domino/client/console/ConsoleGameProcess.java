@@ -15,8 +15,7 @@ public class ConsoleGameProcess {
         System.out.println("до 1 хода распределение костей такое: ");
         ConsoleUtils.output(gameProcess.getPlayers(), gameProcess.board);
 
-        firstTile = gameProcess.getPl().makeAFirstMove();
-        gameProcess.setActiveTiles(gameProcess.board.putFirstTile(firstTile, gameProcess.getActiveTiles()));
+        gameProcess.firstStep();
 
         gameProcess.board.output();
 

@@ -21,14 +21,14 @@ public interface IGameProcess {
     Player beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException;
 
     //шаг
-    Player gameStep(int view, String code);
+    Player gameStep(int view, String code) throws IOException, ClassNotFoundException;
 
     //проверить условие конца игры
     void gameOverCheck(List<Player> players);
 
-//    List<Player> createPlayers(int numPlayers) throws IOException;
-//
-//    List<Player> giving() throws IOException;
-
     Heap getHeap();
+
+    GameBoard getBoard();
+
+    void firstStep() throws IOException, ClassNotFoundException;
 }

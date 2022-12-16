@@ -51,8 +51,8 @@ public class BasicWindow extends JFrame{
 
     private int size = 7;
 
-    private int num;
-    private int view; //2 - локально; 3 - удаленно
+    private final int num;
+    private final int view; //2 - локально; 3 - удаленно
 
     private String code = "";
     private ButtonGroup buttonGroup;
@@ -93,7 +93,13 @@ public class BasicWindow extends JFrame{
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
+                try {
+                    UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 boardTableModel.fireTableDataChanged();
                 UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
@@ -103,7 +109,13 @@ public class BasicWindow extends JFrame{
         buttonBegin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
+                try {
+                    UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 boardTableModel.fireTableDataChanged();
                 UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();

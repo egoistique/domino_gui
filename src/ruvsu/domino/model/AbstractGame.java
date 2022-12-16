@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public abstract class AbstractGame implements IGameProcess{
     public Heap heap = new Heap();
-    public final GameBoard board = new GameBoard();
+    public GameBoard board = new GameBoard();
     public final Table table = new Table();
     public Scanner sc = new Scanner(System.in);
     protected Player pl;
@@ -13,4 +13,5 @@ public abstract class AbstractGame implements IGameProcess{
     public AbstractGame(Player pl) {
         this.pl = pl;
     }
+
 }

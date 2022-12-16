@@ -71,42 +71,15 @@ public class NetworkGameProcess extends AbstractGame {
         this.activeTiles = activeTiles;
     }
 
-    //создать игроков
-//    @Override
-//    public List<Player> createPlayers(int numPlayers) throws IOException {
-//        //послать запрос на сервер о создании игроков
-//        out.println("createPlayers" + numPlayers);
-//        //получив инфо о игроках
-//        String s;
-//        if((s = in.readLine()) != null){
-//            if(s.equals("players created")){
-//                players = Helping.players;
-//            }
-//        }
-//        return players;
-//    }
-
-//    @Override
-//    public List<Player> giving() throws IOException {
-//        //послать запрос на сервер о раздаче
-//        out.println("give");
-//        //получить инфо o раздаче
-//        String s;
-//        if((s = in.readLine()) != null){
-//            if(s.equals("given")){
-//                players = Helping.players;
-//                heap = Helping.heap;
-//            }
-//        }
-//
-//        return players;
-//    }
-
     @Override
     public Heap getHeap() {
         return heap;
     }
 
+    @Override
+    public GameBoard getBoard(){
+        return board;
+    }
     /**процесс, который хранит домино, юзеров, поле должен  запускаться на СЕРВЕРЕ (+)
  *
  * на КЛИЕНТЕ запускаем networkGameProcess (+)
@@ -162,44 +135,97 @@ public class NetworkGameProcess extends AbstractGame {
                 pls = (List) inObject.readObject();
                 pls.forEach(System.out::println);
                 players = pls;
+
+
             }
         }
         return pl;
     }
 
     @Override
-    public Player gameStep(int view, String code) {
+    public void firstStep() throws IOException, ClassNotFoundException {
+        out.println("FIRST_STEP");
+        String s;
+        if((s = in.readLine()) != null){
+            if(s.equals("FIRST_STEP_COMPLETE")){
+                //обновить данные на клиенте
+                Object o;
+                if((o = inObject.readObject()) != null){
+                    board = (GameBoard) o;
+                }
+
+                Object o11;
+                if((o11 = inObject.readObject()) != null){
+                    heap = (Heap) o11;
+                }
+
+                List<Player> pls1;
+                pls1 = (List) inObject.readObject();
+                pls1.forEach(System.out::println);
+                players = pls1;
+            }
+        }
+    }
+
+    @Override
+    public Player gameStep(int view, String code) throws IOException, ClassNotFoundException {
 
         //послать запрос на сервер, получив инфо кто ходит
         //определить кто ходит
+
+
         pl = table.defineMover(players, pl);
 
         //получить кость которой игрок хочет походить
         if (UIDominoUtils.listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles()) && !code.equals("")) {
             currTile = pl.makeInteractiveMove(code, board);
 
-            out.println(Character.toChars(ConsoleUtils.tileToString(currTile, board)));
-
-        } else{
-            currTile = pl.makeAMove(activeTiles, heap);
+            out.println(Character.toChars(ConsoleUtils.getCodeOfTile(currTile, board)));
         }
+//        } else{
+//            currTile = pl.makeAMove(activeTiles, heap);
+//        }
 
         //отправить currTile на сервер, сервер кладает кость, присылает обратно игроку новую конфигурацию стола,
         //клиент это обновляет на экране
         //положить на стол кость
 
-        activeTiles = board.putTile(currTile, activeTiles);
+        out.println("NEXT_STEP");
+        outObject.reset();
+        outObject.writeObject(currTile);
+        String s;
+        if((s = in.readLine()) != null){
+            if(s.equals("NEXT_STEP_COMPLETE")){
+                //обновить данные на клиенте
+                Object o;
+                if((o = inObject.readObject()) != null){
+                    board = (GameBoard) o;
+                }
 
-        if (currTile.first == 99 && currTile.last == 99) {//если игрок не смог походить (makeAMove вернул Tile(99,99)) он добрал из базара
-            currTile = pl.makeAMove(activeTiles, heap); //еще одна попытка походить
-            activeTiles = board.putTile(currTile, activeTiles);
+                Object o11;
+                if((o11 = inObject.readObject()) != null){
+                    heap = (Heap) o11;
+                }
+
+                List<Player> pls1;
+                pls1 = (List) inObject.readObject();
+                pls1.forEach(System.out::println);
+                players = pls1;
+            }
         }
 
-        if (currTile.first == 99 && currTile.last == 99) {//если игрок не смог походить после добирания из базара счетчик увеличивается
-            checkFor++;
-        } else { //иначе обнуляется
-            checkFor = 0;
-        }
+//        activeTiles = board.putTile(currTile, activeTiles);
+//
+//        if (currTile.first == 99 && currTile.last == 99) {//если игрок не смог походить (makeAMove вернул Tile(99,99)) он добрал из базара
+//            currTile = pl.makeAMove(activeTiles, heap); //еще одна попытка походить
+//            activeTiles = board.putTile(currTile, activeTiles);
+//        }
+//
+//        if (currTile.first == 99 && currTile.last == 99) {//если игрок не смог походить после добирания из базара счетчик увеличивается
+//            checkFor++;
+//        } else { //иначе обнуляется
+//            checkFor = 0;
+//        }
 
         return pl;
 

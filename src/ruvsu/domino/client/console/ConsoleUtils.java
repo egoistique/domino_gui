@@ -55,7 +55,7 @@ public class ConsoleUtils {
         }
     }
 
-    public static int tileToString(Tile tile, GameBoard field) {
+    public static int getCodeOfTile(Tile tile, GameBoard field) {
         return field.getCode(field.tileImages, tile);
     }
 }

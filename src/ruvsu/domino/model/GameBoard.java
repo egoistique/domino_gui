@@ -1,9 +1,10 @@
 package ruvsu.domino.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameBoard {
+public class GameBoard implements Serializable {
 
     public static final int SIZE = 25;
     public final int DOMINO_CODE_HORIZONTAL = 127025;

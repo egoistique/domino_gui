@@ -80,9 +80,6 @@ public class StartWindow extends JFrame{
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
-//                basicWindow.setNum(num);
-//                basicWindow.setView(view);
-//                basicWindow.run(basicWindow);
             }
         });
 

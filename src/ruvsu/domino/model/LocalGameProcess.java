@@ -51,6 +51,10 @@ public class LocalGameProcess extends AbstractGame {
         this.activeTiles = activeTiles;
     }
 
+    @Override
+    public GameBoard getBoard(){
+        return board;
+    }
     //начало игры, первый ход
     @Override
     public Player beginGamePr(int view, int numPl) {
@@ -87,7 +91,11 @@ public class LocalGameProcess extends AbstractGame {
                 currTile = pl.makeAMove(activeTiles, heap);
             }
         } else if(view == 3){//если view = 3 то это клиент сервер
-
+            if (UIDominoUtils.listEqualsIgnoreOrder(players.get(0).getPackOfTiles(), pl.getPackOfTiles()) && !code.equals("")) {
+                currTile = pl.makeInteractiveMove(code, board);
+            } else {
+                currTile = pl.makeAMove(activeTiles, heap);
+            }
         }
 
         //положить на стол кость
@@ -107,8 +115,13 @@ public class LocalGameProcess extends AbstractGame {
         return pl;
     }
 
+    @Override
+    public void firstStep(){
+        Tile firstTile = getPl().makeAFirstMove();
+        setActiveTiles(board.putFirstTile(firstTile, getActiveTiles()));
+    }
+
     //создать игроков
-//    @Override
     public List<Player> createPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers; i++) {
             players.add(new Player());

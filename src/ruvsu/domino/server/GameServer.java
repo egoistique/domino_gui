@@ -1,11 +1,9 @@
 package ruvsu.domino.server;
 
+import ruvsu.domino.client.console.ConsoleUtils;
 import ruvsu.domino.client.network.Helping;
 import ruvsu.domino.client.network.NetworkGameProcess;
-import ruvsu.domino.model.Heap;
-import ruvsu.domino.model.IGameProcess;
-import ruvsu.domino.model.LocalGameProcess;
-import ruvsu.domino.model.Player;
+import ruvsu.domino.model.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -50,9 +48,7 @@ public class GameServer {
         boolean gameOver = false;
         while (!gameOver){
             if((request = in.readLine()) != null){
-                //если запрос на создание игрков, вызываем у локального процесса метод createPlayers
                 if(request.contains("begin")){
-                    System.out.println("successful get command");
                     Player pl = process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
                     List<Player> players = process.getPlayers();
                     Heap heap = process.getHeap();
@@ -62,14 +58,55 @@ public class GameServer {
                     outObject.writeObject(pl);
                     outObject.writeObject(heap);
                     outObject.writeObject(players);
+
+                    outObject.flush();
                 }
+                if(request.contains("FIRST_STEP")){
+                    process.firstStep();
 
+                    List<Player> players = process.getPlayers();
+                    Heap heap = process.getHeap();
+                    GameBoard gameBoard = process.getBoard();
+                    //отдаем команду что шаг сделан
+                    out.println("FIRST_STEP_COMPLETE");
 
+                    outObject.reset();
+                    outObject.writeObject(gameBoard);
+                    outObject.writeObject(heap);
+                    outObject.writeObject(players);
+
+                    outObject.flush();
+                }
+                if(request.contains("NEXT_STEP")){
+                    process.firstStep();
+
+                    Object t;
+                    Tile currTile = null;
+                    if((t = inObject.readObject()) != null){
+                        currTile = (Tile) t;
+                    }
+
+                    String code = String.valueOf(ConsoleUtils.getCodeOfTile(currTile, process.getBoard()));
+
+                    process.gameStep(3, code);
+
+                    List<Player> players = process.getPlayers();
+                    Heap heap = process.getHeap();
+                    GameBoard gameBoard = process.getBoard();
+                    //отдаем команду что шаг сделан
+                    out.println("NEXT_STEP_COMPLETE");
+
+                    outObject.reset();
+                    outObject.writeObject(gameBoard);
+                    outObject.writeObject(heap);
+                    outObject.writeObject(players);
+
+                    outObject.flush();
+                }
                 System.out.println(request);
             }
 
-
-//            if(request.equals("99999")){ //TODO придумать вариант команды "конец игры", 35 минуты до конца
+//            if(request.equals("99999")){ //TODO придумать вариант команды "конец игры"
 //                gameOver = true;
 //                socket.close();
 //            } else {
