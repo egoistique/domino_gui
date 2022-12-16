@@ -93,7 +93,13 @@ public class BasicWindow extends JFrame{
         buttonNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
+                try {
+                    UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 boardTableModel.fireTableDataChanged();
                 UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
@@ -103,7 +109,13 @@ public class BasicWindow extends JFrame{
         buttonBegin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
+                try {
+                    UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 boardTableModel.fireTableDataChanged();
                 UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();

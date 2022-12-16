@@ -7,6 +7,7 @@ import ruvsu.domino.client.ui.GameOverWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -95,10 +96,11 @@ public class UIDominoUtils {
     }
 
     //сделать 1 шаг
-    public static BoardTM firstStep(BoardTM boardTM, AbstractGame uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
+    public static BoardTM firstStep(BoardTM boardTM, AbstractGame uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) throws IOException, ClassNotFoundException {
         //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
-        Tile firstTile = uiProcess.getPl().makeAFirstMove();
-        uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
+        uiProcess.firstStep();
+//        Tile firstTile = uiProcess.getPl().makeAFirstMove();
+//        uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
 
         //включить радио кнопку у того, кто сделал первый ход
         int numOfCurrentRadio = defineFirstMover(uiProcess.getPlayers());
@@ -164,7 +166,7 @@ public class UIDominoUtils {
     }
 
     //следующий шаг
-    public static void nextStep(BoardTM boardTM, AbstractGame uiProcess, String code, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) {
+    public static void nextStep(BoardTM boardTM, AbstractGame uiProcess, String code, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) throws IOException, ClassNotFoundException {
         //шаг игры
         if (!uiProcess.isGameOver() && uiProcess.getCheckFor() < uiProcess.getPlayers().size()) {
             //сделать ход

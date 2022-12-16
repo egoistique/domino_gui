@@ -1,11 +1,6 @@
 package ruvsu.domino.server;
 
-import ruvsu.domino.client.network.Helping;
-import ruvsu.domino.client.network.NetworkGameProcess;
-import ruvsu.domino.model.Heap;
-import ruvsu.domino.model.IGameProcess;
-import ruvsu.domino.model.LocalGameProcess;
-import ruvsu.domino.model.Player;
+import ruvsu.domino.model.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -25,8 +20,6 @@ public class GameServer {
 
     private IGameProcess process;
 
-    private Helping help = new Helping();
-
     public GameServer(int port) {
         this.port = port;
     }
@@ -44,22 +37,62 @@ public class GameServer {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
         ObjectOutputStream outObject = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream inObject = new ObjectInputStream(socket.getInputStream());
 
         String request;
         boolean gameOver = false;
         while (!gameOver){
             if((request = in.readLine()) != null){
                 //если запрос на создание игрков, вызываем у локального процесса метод createPlayers
-                if(request.contains("begin")){
-                    System.out.println("successful get command");
-                    Player pl = process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
+                if(request.contains("BEGIN")) {
+                    System.out.println("successful get command begin");
+                    process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
+                    GameBoard gameBoard = process.getBoard();
+                    List<Player> players = process.getPlayers();
+                    Heap heap = process.getHeap();
+
+                    //отдаем команду что они созданы
+                    out.println("BEGIN_COMPLETE");
+
+                    outObject.writeObject(gameBoard);
+                    outObject.writeObject(heap);
+                    outObject.writeObject(players);
+
+                }  else if(request.contains("FIRST_STEP")) {
+                    System.out.println("successful get command first step");
+
+                    process.firstStep();
+
+                    GameBoard gameBoard = process.getBoard();
                     List<Player> players = process.getPlayers();
                     Heap heap = process.getHeap();
                     //отдаем команду что они созданы
-                    out.println("began");
+                    out.println("FIRST_STEP_COMPLETE");
 
-                    outObject.writeObject(pl);
+                    outObject.reset();
+                    outObject.writeObject(gameBoard);
+                    outObject.writeObject(heap);
+                    outObject.writeObject(players);
+                } else if(request.contains("NEXT_STEP")) {
+                    System.out.println("successful get command next step");
+
+                    String code = request;
+
+                    if(!request.equals("NEXT_STEP")){
+                        code = code.replace("NEXT_STEP", "");
+                    } else {
+                        code = "";
+                    }
+                    process.gameStep(3, code);
+
+                    GameBoard gameBoard = process.getBoard();
+                    List<Player> players = process.getPlayers();
+                    Heap heap = process.getHeap();
+
+                    //отдаем команду что они созданы
+                    out.println("NEXT_STEP_COMPLETE");
+
+                    outObject.reset();
+                    outObject.writeObject(gameBoard);
                     outObject.writeObject(heap);
                     outObject.writeObject(players);
                 }
@@ -80,4 +113,11 @@ public class GameServer {
         }
     }
 
+    public void send(GameBoard gb, Heap heap, List<Player> players, ObjectOutputStream outObject) throws IOException {
+        outObject.reset();
+        outObject.writeObject(gb);
+        outObject.writeObject(heap);
+        outObject.writeObject(players);
+    }
 }
+
