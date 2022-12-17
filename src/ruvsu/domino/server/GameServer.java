@@ -34,15 +34,12 @@ public class GameServer {
         process = new LocalGameProcess(new Player());
 
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
         ObjectOutputStream outObject = new ObjectOutputStream(socket.getOutputStream());
 
         String request;
         boolean gameOver = false;
         while (!gameOver){
             if((request = in.readLine()) != null){
-                //если запрос на создание игрков, вызываем у локального процесса метод createPlayers
                 if(request.contains("BEGIN")) {
                     System.out.println("successful get command begin");
                     process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
@@ -51,7 +48,6 @@ public class GameServer {
                     Heap heap = process.getHeap();
 
                     //отдаем команду что они созданы
-                    //out.println("BEGIN_COMPLETE");
                     outObject.writeObject("BEGIN_COMPLETE");
                     sendState(outObject, gameBoard, heap, players);
                 }  else if(request.contains("FIRST_STEP")) {
@@ -62,8 +58,8 @@ public class GameServer {
                     GameBoard gameBoard = process.getBoard();
                     List<Player> players = process.getPlayers();
                     Heap heap = process.getHeap();
+
                     //отдаем команду что они созданы
-                    //out.println("FIRST_STEP_COMPLETE");
                     outObject.writeObject("FIRST_STEP_COMPLETE");
                     sendState(outObject, gameBoard, heap, players);
                 } else if(request.contains("NEXT_STEP")) {
@@ -83,18 +79,14 @@ public class GameServer {
                     Heap heap = process.getHeap();
 
                     //отдаем команду что они созданы
-                    //out.println("NEXT_STEP_COMPLETE");
                     outObject.writeObject("NEXT_STEP_COMPLETE");
-
                     sendState(outObject, gameBoard, heap, players);
                 }
-
-
                 System.out.println(request);
             }
 
 
-//            if(request.equals("99999")){ //TODO придумать вариант команды "конец игры", 35 минуты до конца
+//            if(request.equals("99999")){ //TODO придумать вариант команды "конец игры"
 //                gameOver = true;
 //                socket.close();
 //            } else {
@@ -111,13 +103,6 @@ public class GameServer {
         outObject.writeObject(heap);
         outObject.writeObject(players);
         outObject.flush();
-    }
-
-    public void send(GameBoard gb, Heap heap, List<Player> players, ObjectOutputStream outObject) throws IOException {
-        outObject.reset();
-        outObject.writeObject(gb);
-        outObject.writeObject(heap);
-        outObject.writeObject(players);
     }
 }
 

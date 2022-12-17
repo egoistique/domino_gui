@@ -13,28 +13,20 @@ public class NetworkGameProcess extends AbstractGame {
     private List<Player> players = new ArrayList<>();
     private Map<Coordinates, Integer> activeTiles = new HashMap<>();
 
-    private Tile currTile;
-
     private int checkFor = 0;
 
     Socket socket;
-    private BufferedReader in;
     private PrintWriter out;
 
-    ObjectOutputStream outObject;
     ObjectInputStream inObject;
 
     public NetworkGameProcess(Player pl, String server, int port) {
         super(pl);
         try {
             socket = new Socket(server, port);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             out = new PrintWriter(socket.getOutputStream(), true);
-
-            outObject = new ObjectOutputStream(socket.getOutputStream());
             inObject = new ObjectInputStream(socket.getInputStream());
-
-
         } catch (IOException e) {
             //TODO handle exception properly
             e.printStackTrace();
@@ -119,7 +111,6 @@ public class NetworkGameProcess extends AbstractGame {
         Object s;
         if((s = inObject.readObject().toString()) != null){
             if(s.toString().equals("BEGIN_COMPLETE")){
-                System.out.println("successful beginning");
                 updateData();
             }
         }
@@ -138,6 +129,19 @@ public class NetworkGameProcess extends AbstractGame {
         }
     }
 
+    @Override
+    public Player gameStep(int view, String code) throws IOException, ClassNotFoundException {
+        out.println("NEXT_STEP" + code);
+        Object s;
+        if((s = inObject.readObject().toString()) != null){
+            if(s.toString().contains("NEXT_STEP_COMPLETE")){
+                //обновить данные на клиенте
+                updateData();
+            }
+        }
+        return pl;
+    }
+
     public void updateData() throws IOException, ClassNotFoundException {
         //обновить данные на клиенте
         Object o;
@@ -154,23 +158,7 @@ public class NetworkGameProcess extends AbstractGame {
 
         List<Player> pls;
         pls = (List) inObject.readObject();
-        //pls.forEach(System.out::println);
         players = pls;
-    }
-
-    @Override
-    public Player gameStep(int view, String code) throws IOException, ClassNotFoundException {
-
-        out.println("NEXT_STEP" + code);
-        Object s;
-        if((s = inObject.readObject().toString()) != null){
-            if(s.toString().contains("NEXT_STEP_COMPLETE")){
-                //обновить данные на клиенте
-                updateData();
-            }
-        }
-
-        return pl;
     }
 
     @Override

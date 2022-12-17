@@ -122,7 +122,6 @@ public class LocalGameProcess extends AbstractGame {
     }
 
     //создать игроков
-//    @Override
     public List<Player> createPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers; i++) {
             players.add(new Player());
