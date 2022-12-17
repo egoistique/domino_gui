@@ -116,9 +116,9 @@ public class NetworkGameProcess extends AbstractGame {
         System.out.println("remote process started");
 
         out.println("BEGIN" + numPl);
-        String s;
-        if((s = in.readLine()) != null){
-            if(s.equals("BEGIN_COMPLETE")){
+        Object s;
+        if((s = inObject.readObject().toString()) != null){
+            if(s.toString().equals("BEGIN_COMPLETE")){
                 System.out.println("successful beginning");
                 updateData();
             }
@@ -129,9 +129,9 @@ public class NetworkGameProcess extends AbstractGame {
     @Override
     public void firstStep() throws IOException, ClassNotFoundException {
         out.println("FIRST_STEP");
-        String s;
-        if((s = in.readLine()) != null){
-            if(s.contains("FIRST_STEP_COMPLETE")){
+        Object s;
+        if((s = inObject.readObject().toString()) != null){
+            if(s.toString().contains("FIRST_STEP_COMPLETE")){
                 //обновить данные на клиенте
                 updateData();
             }
@@ -142,7 +142,9 @@ public class NetworkGameProcess extends AbstractGame {
         //обновить данные на клиенте
         Object o;
         if((o = inObject.readObject()) != null){
-            board = (GameBoard) o;
+
+            GameBoard gameBoard = (GameBoard) o;
+            board = gameBoard;
         }
 
         Object o1;
@@ -160,9 +162,9 @@ public class NetworkGameProcess extends AbstractGame {
     public Player gameStep(int view, String code) throws IOException, ClassNotFoundException {
 
         out.println("NEXT_STEP" + code);
-        String s;
-        if((s = in.readLine()) != null){
-            if(s.contains("NEXT_STEP_COMPLETE")){
+        Object s;
+        if((s = inObject.readObject().toString()) != null){
+            if(s.toString().contains("NEXT_STEP_COMPLETE")){
                 //обновить данные на клиенте
                 updateData();
             }
