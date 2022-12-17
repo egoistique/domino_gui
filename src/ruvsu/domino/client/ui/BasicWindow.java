@@ -51,8 +51,8 @@ public class BasicWindow extends JFrame{
 
     private int size = 7;
 
-    private int num;
-    private int view; //2 - локально; 3 - удаленно
+    private final int num;
+    private final int view; //2 - локально; 3 - удаленно
 
     private String code = "";
     private ButtonGroup buttonGroup;

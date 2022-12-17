@@ -15,5 +15,4 @@ public class Tile implements Serializable {
     public int getSum() {
         return first + last;
     }
-
 }

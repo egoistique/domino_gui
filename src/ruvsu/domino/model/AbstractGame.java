@@ -13,4 +13,5 @@ public abstract class AbstractGame implements IGameProcess{
     public AbstractGame(Player pl) {
         this.pl = pl;
     }
+
 }
