@@ -1,7 +1,5 @@
 package ruvsu.domino.client.network;
 
-import ruvsu.domino.client.console.ConsoleUtils;
-import ruvsu.domino.client.ui.utils.UIDominoUtils;
 import ruvsu.domino.model.*;
 
 import java.io.*;
