@@ -12,17 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 public class NetworkGameProcess extends AbstractGame {
-
     private List<Player> players = new ArrayList<>();
     private Map<Coordinates, Integer> activeTiles = new HashMap<>();
-
     private int checkFor = 0;
-
     Socket socket;
     private PrintWriter out;
-
     ObjectInputStream inObject;
-
     SendData sendData;
 
     public NetworkGameProcess(Player pl, String server, int port) {
@@ -108,7 +103,7 @@ public class NetworkGameProcess extends AbstractGame {
  *
  * */
     @Override
-    public Player beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException {
+    public void beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException {
         System.out.println("remote process started");
 
         out.println("BEGIN" + numPl);
@@ -118,7 +113,6 @@ public class NetworkGameProcess extends AbstractGame {
                 updateData();
             }
         }
-        return pl;
     }
 
     @Override
@@ -127,7 +121,6 @@ public class NetworkGameProcess extends AbstractGame {
         Object s;
         if((s = inObject.readObject().toString()) != null){
             if(s.toString().contains("FIRST_STEP_COMPLETE")){
-                //обновить данные на клиенте
                 updateData();
             }
         }
@@ -139,7 +132,6 @@ public class NetworkGameProcess extends AbstractGame {
         Object s;
         if ((s = inObject.readObject().toString()) != null) {
             if (s.toString().contains("NEXT_STEP_COMPLETE")) {
-                //обновить данные на клиенте
                 updateData();
             }
         }
@@ -152,19 +144,17 @@ public class NetworkGameProcess extends AbstractGame {
         Object s;
         if ((s = inObject.readObject().toString()) != null) {
             if (s.toString().contains("GAME_OVER_CHECK_COMPLETE")) {
-                //обновить данные на клиенте
                 updateData();
             }
         }
     }
 
     @Override
-    public void takeTileFromBazar() throws IOException, ClassNotFoundException {
-        out.println("TAKE_FROM_BAZAR");
+    public void takeTileFromBazaar() throws IOException, ClassNotFoundException {
+        out.println("TAKE_FROM_BAZAAR");
         Object s;
         if ((s = inObject.readObject().toString()) != null) {
-            if (s.toString().contains("TAKE_FROM_BAZAR_COMPLETE")) {
-                //обновить данные на клиенте
+            if (s.toString().contains("TAKE_FROM_BAZAAR_COMPLETE")) {
                 updateData();
             }
         }

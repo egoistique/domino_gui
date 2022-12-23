@@ -18,7 +18,7 @@ public interface IGameProcess {
     void setActiveTiles(Map<Coordinates, Integer> activeTiles);
 
     //начало игры, первый ход
-    Player beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException;
+    void beginGamePr(int view, int numPl) throws IOException, ClassNotFoundException;
 
     //шаг
     Player gameStep(int view, String code) throws IOException, ClassNotFoundException;
@@ -30,7 +30,7 @@ public interface IGameProcess {
 
     void firstStep() throws IOException, ClassNotFoundException;
 
-    void takeTileFromBazar() throws IOException, ClassNotFoundException;
+    void takeTileFromBazaar() throws IOException, ClassNotFoundException;
 
     GameBoard getBoard();
 }

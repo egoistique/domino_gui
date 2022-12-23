@@ -13,8 +13,6 @@ import model.Player;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +33,11 @@ public class BasicWindow extends JFrame{
 
     private final JButton buttonBegin =  new JButton("Begin");
     private final JButton buttonNextStep =  new JButton("Next Step");
-    private final JButton buttonTakeFromBazar =  new JButton("Взять из базара");
+    private final JButton buttonTakeFromBazaar =  new JButton("Взять из базара");
 
     private final JLabel labelMainPl = new JLabel("Ваш набор: ");
-    private final JLabel labelBazar = new JLabel("В колоде осталось: ");
-    private final JTextArea bazarArea = new JTextArea();
+    private final JLabel labelBazaar = new JLabel("В колоде осталось: ");
+    private final JTextArea bazaarArea = new JTextArea();
     private final JTextArea currentSelectionLabel = new JTextArea("");
 
     private IGameProcess process = new LocalGameProcess(new Player());
@@ -48,17 +46,12 @@ public class BasicWindow extends JFrame{
     private final List<JLabel> labels = new ArrayList<>();
     private final List<JRadioButton> radios = new ArrayList<>();
 
-    public JComponent getUi() {
-        return ui;
-    }
-
     private int size = 7;
 
     private final int num;
     private final int view; //2 - локально; 3 - удаленно
 
     private String code = "";
-    private ButtonGroup buttonGroup;
 
     BasicWindow(int num1, int view1) throws IOException, ClassNotFoundException {
         num = num1;
@@ -85,7 +78,7 @@ public class BasicWindow extends JFrame{
 
         ui.add(createGameBoard());
 
-        UIDominoUtils.beginGame((AbstractGame) process, f, areas, bazarArea);
+        UIDominoUtils.beginGame((AbstractGame) process, f, areas, bazaarArea);
 
         UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
 
@@ -93,52 +86,37 @@ public class BasicWindow extends JFrame{
 
         initTableMainPl();
 
-        buttonNextStep.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazarArea);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-                boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
-                mainPlTableModel.fireTableDataChanged();
+        buttonNextStep.addActionListener(e -> {
+            try {
+                UIDominoUtils.nextStep(boardTableModel, (AbstractGame) process, code, f, radios, areas, bazaarArea);
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
+            boardTableModel.fireTableDataChanged();
+            UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
+            mainPlTableModel.fireTableDataChanged();
         });
 
-        buttonBegin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazarArea);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-                boardTableModel.fireTableDataChanged();
-                UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
-                mainPlTableModel.fireTableDataChanged();
+        buttonBegin.addActionListener(e -> {
+            try {
+                UIDominoUtils.firstStep(boardTableModel, (AbstractGame) process, f, radios, areas, bazaarArea);
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
+            boardTableModel.fireTableDataChanged();
+            UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
+            mainPlTableModel.fireTableDataChanged();
         });
 
-        buttonTakeFromBazar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    UIDominoUtils.takeFromBazar((AbstractGame) process);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-                UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
-                mainPlTableModel.fireTableDataChanged();
-                UIDominoUtils.outBazar(f, bazarArea, (AbstractGame) process);
+        buttonTakeFromBazaar.addActionListener(e -> {
+            try {
+                UIDominoUtils.takeFromBazaar((AbstractGame) process);
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
+            UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
+            mainPlTableModel.fireTableDataChanged();
+            UIDominoUtils.outBazar(f, bazaarArea, (AbstractGame) process);
         });
 
         tableMain.addMouseListener(new java.awt.event.MouseAdapter(){
@@ -155,7 +133,7 @@ public class BasicWindow extends JFrame{
     }
 
     private void initLists(int num){
-        buttonGroup = new ButtonGroup();
+        ButtonGroup buttonGroup = new ButtonGroup();
         for (int i = 0; i < num; i++){
             areas.add(new JTextArea());
             labels.add(new JLabel("Игрок " + i));
@@ -192,10 +170,10 @@ public class BasicWindow extends JFrame{
         boxLocalButtons.setBorder(new EmptyBorder(10, 10, 10, 10));
         buttonNextStep.setPreferredSize(new Dimension(200, 70));
         buttonBegin.setPreferredSize(new Dimension(200, 70));
-        buttonTakeFromBazar.setPreferredSize(new Dimension(200, 70));
+        buttonTakeFromBazaar.setPreferredSize(new Dimension(200, 70));
         boxLocalButtons.add(buttonBegin);
         boxLocalButtons.add(buttonNextStep);
-        boxLocalButtons.add(buttonTakeFromBazar);
+        boxLocalButtons.add(buttonTakeFromBazaar);
         topPanel.add(boxLocalButtons);
 
         return topPanel;
@@ -213,14 +191,14 @@ public class BasicWindow extends JFrame{
         mainBox.add(createMainPlayerPanel());
         bottomPanel.add(mainBox, BorderLayout.WEST);
 
-        Box bazarBox = Box.createVerticalBox();
-        bazarBox.setBorder(new EmptyBorder(10, 10, 10, 10));
-        bazarBox.add(Box.createVerticalStrut(20));
-        bazarBox.add(labelBazar);
-        bazarArea.setPreferredSize(new Dimension(200, 100));
-        bazarBox.add(bazarArea);
+        Box bazaarBox = Box.createVerticalBox();
+        bazaarBox.setBorder(new EmptyBorder(10, 10, 10, 10));
+        bazaarBox.add(Box.createVerticalStrut(20));
+        bazaarBox.add(labelBazaar);
+        bazaarArea.setPreferredSize(new Dimension(200, 100));
+        bazaarBox.add(bazaarArea);
 
-        bottomPanel.add(bazarBox, BorderLayout.EAST);
+        bottomPanel.add(bazaarBox, BorderLayout.EAST);
 
         return bottomPanel;
     }
@@ -258,24 +236,21 @@ public class BasicWindow extends JFrame{
     }
 
     public void run(BasicWindow basicWindow){
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception useDefault) {
-                }
-//                BasicWindow o = new BasicWindow();
-
-                JFrame f = new JFrame(basicWindow.getClass().getSimpleName());
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setLocationByPlatform(true);
-
-                f.setContentPane(basicWindow.getUI());
-                f.pack();
-                f.setSize(1600, 1050);
-                f.setVisible(true);
+        Runnable r = () -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception useDefault) {
+                useDefault.printStackTrace();
             }
+
+            JFrame f = new JFrame(basicWindow.getClass().getSimpleName());
+            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            f.setLocationByPlatform(true);
+
+            f.setContentPane(basicWindow.getUI());
+            f.pack();
+            f.setSize(1600, 1050);
+            f.setVisible(true);
         };
         SwingUtilities.invokeLater(r);
     }

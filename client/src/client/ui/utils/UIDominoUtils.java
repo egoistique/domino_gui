@@ -40,12 +40,12 @@ public class UIDominoUtils {
 
     //вывести очки в окно
     public static String outPoints(List<Player> players) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         int[] sums = countPlayersPoints(players);
         for (int i = 0; i < players.size(); i++) {
-            s += ("\nИгрок " + i + " набрал " + sums[i] + " очков \n");
+            s.append("\nИгрок ").append(i).append(" набрал ").append(sums[i]).append(" очков \n");
         }
-        return s;
+        return s.toString();
     }
 
     //определить победителя
@@ -74,7 +74,7 @@ public class UIDominoUtils {
     }
 
     //посчитать суммы очков всеъ игроков
-    private static int[] countPlayersPoints(List<Player> players) {
+    public static int[] countPlayersPoints(List<Player> players) {
         int[] sums = new int[players.size()];
         int fullSum = 0;
         for (int i = 0; i < players.size(); i++) {
@@ -96,11 +96,9 @@ public class UIDominoUtils {
     }
 
     //сделать 1 шаг
-    public static BoardTM firstStep(BoardTM boardTM, AbstractGame uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) throws IOException, ClassNotFoundException {
+    public static void firstStep(BoardTM boardTM, AbstractGame uiProcess, Font f, List<JRadioButton> radios, List<JTextArea> areas, JTextArea bazarArea) throws IOException, ClassNotFoundException {
         //сделать первый шаг, вывести актуальное состояние гейм борда и обновить текст филд ходящего игрока
         uiProcess.firstStep();
-//        Tile firstTile = uiProcess.getPl().makeAFirstMove();
-//        uiProcess.setActiveTiles(uiProcess.board.putFirstTile(firstTile, uiProcess.getActiveTiles()));
 
         //включить радио кнопку у того, кто сделал первый ход
         int numOfCurrentRadio = defineFirstMover(uiProcess.getPlayers());
@@ -115,8 +113,6 @@ public class UIDominoUtils {
 
         boardTM.setBoard(uiProcess.board.getField());
         boardTM.fireTableDataChanged();
-
-        return boardTM;
     }
 
     //вывести начальное состояние игроков
@@ -193,9 +189,8 @@ public class UIDominoUtils {
     }
 
     //взять из базара
-    public static void takeFromBazar(AbstractGame uiProcess) throws IOException, ClassNotFoundException {
-        uiProcess.takeTileFromBazar();
-        //mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+    public static void takeFromBazaar(AbstractGame uiProcess) throws IOException, ClassNotFoundException {
+        uiProcess.takeTileFromBazaar();
     }
 
     //вывести набор главного игрока

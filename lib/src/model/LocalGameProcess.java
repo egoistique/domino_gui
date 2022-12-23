@@ -1,7 +1,4 @@
 package model;
-
-
-
 import java.util.*;
 
 public class LocalGameProcess extends AbstractGame {
@@ -57,7 +54,7 @@ public class LocalGameProcess extends AbstractGame {
 
     //начало игры, первый ход
     @Override
-    public Player beginGamePr(int view, int numPl) {
+    public void beginGamePr(int view, int numPl) {
         //создать игроков
         createPlayers(numPl);
 
@@ -66,7 +63,6 @@ public class LocalGameProcess extends AbstractGame {
 
         //определить кто ходит первым
         pl = table.whoIsFirstMove(players);
-        return pl;
     }
 
     //шаг
@@ -122,11 +118,10 @@ public class LocalGameProcess extends AbstractGame {
     }
 
     //создать игроков
-    public List<Player> createPlayers(int numPlayers) {
+    private void createPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers; i++) {
             players.add(new Player());
         }
-        return players;
     }
 
     //проверить условие конца игры
@@ -141,7 +136,7 @@ public class LocalGameProcess extends AbstractGame {
     }
 
     @Override
-    public void takeTileFromBazar(){
+    public void takeTileFromBazaar(){
         players.get(0).interactiveTakeFromBazar(heap);
     }
 

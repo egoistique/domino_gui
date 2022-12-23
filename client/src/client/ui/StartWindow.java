@@ -3,19 +3,12 @@ package client.ui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class StartWindow extends JFrame{
-    private final JButton buttonOk =  new JButton("OK");
-    private final JRadioButton radio2 = new JRadioButton("2           ");
     private final JRadioButton radio3 = new JRadioButton("3           ");
     private final JRadioButton radio4 = new JRadioButton("4           ");
-    private final JRadioButton radioLocal = new JRadioButton("Local           ");
     private final JRadioButton radioRemote = new JRadioButton("Remote           ");
-    private final JLabel numPlLabel = new JLabel("Выберите число участников 2/3/4 ");
-    private final JLabel chooserLabel = new JLabel("Выберите вид ");
 
     private int num = 2;
     private int view = 2;
@@ -29,14 +22,17 @@ public class StartWindow extends JFrame{
         container.setLayout(new GridLayout(3, 4,3, 3));
 
 
+        JLabel numPlLabel = new JLabel("Выберите число участников 2/3/4 ");
         container.add(numPlLabel);
         ButtonGroup groupNum = new ButtonGroup();
+        JRadioButton radio2 = new JRadioButton("2           ");
         groupNum.add(radio2);
         groupNum.add(radio3);
         groupNum.add(radio4);
         radio2.setSelected(true);
 
         ButtonGroup groupChooser = new ButtonGroup();
+        JRadioButton radioLocal = new JRadioButton("Local           ");
         groupChooser.add(radioLocal);
         groupChooser.add(radioRemote);
         radioLocal.setSelected(true);
@@ -48,6 +44,7 @@ public class StartWindow extends JFrame{
         numOfPl.add(radio4);
         container.add(numOfPl);
 
+        JLabel chooserLabel = new JLabel("Выберите вид ");
         container.add(chooserLabel);
 
         Box chooser = Box.createHorizontalBox();
@@ -56,30 +53,26 @@ public class StartWindow extends JFrame{
         chooser.add(radioRemote);
         container.add(chooser);
 
+        JButton buttonOk = new JButton("OK");
         container.add(buttonOk);
 
-        buttonOk.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(radio3.isSelected()) {
-                    num = 3;
-                } else if (radio4.isSelected()) {
-                    num = 4;
-                }
+        buttonOk.addActionListener(e -> {
+            if(radio3.isSelected()) {
+                num = 3;
+            } else if (radio4.isSelected()) {
+                num = 4;
+            }
 
-                if(radioRemote.isSelected()){
-                    view = 3;
-                }
+            if(radioRemote.isSelected()){
+                view = 3;
+            }
 
-                BasicWindow basicWindow;
-                try {
-                    basicWindow = new BasicWindow(num, view);
-                    basicWindow.run(basicWindow);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
+            BasicWindow basicWindow;
+            try {
+                basicWindow = new BasicWindow(num, view);
+                basicWindow.run(basicWindow);
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
         });
 

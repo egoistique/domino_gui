@@ -1,46 +1,19 @@
 package client.console;
 
 
+import client.ui.utils.UIDominoUtils;
 import model.GameBoard;
 import model.Player;
-import model.Tile;
 
 import java.util.List;
 
 public class ConsoleUtils {
 
     public static void outPoints(List<Player> players){
-        int[] sums = countPlayersPoints(players);
+        int[] sums = UIDominoUtils.countPlayersPoints(players);
         for (int i = 0; i < players.size(); i++){
             System.out.println("Игрок " + i + " набрал " + sums[i] + " очков");
         }
-    }
-
-    public static int[] countPlayersPoints(List<Player> players){
-        int[] sums = new int[players.size()];
-        int fullSum = 0;
-        for (int i = 0; i < players.size(); i++){
-            sums[i] = countTotalPoints(players.get(i));
-            fullSum += countTotalPoints(players.get(i));
-        }
-
-        for (int i = 0; i < players.size(); i++){
-            if (sums[i] == 0){
-                sums[i] = fullSum;
-            }
-        }
-        return sums;
-    }
-
-    public static int countTotalPoints(Player p){
-        int sum = 0;
-        for (Tile t :  p.getPackOfTiles()){
-            sum += t.first + t.last;
-            if (t.last == t.first && t.last == 0){
-                sum += 10;
-            }
-        }
-        return sum;
     }
 
     public static void output(List<Player> players, GameBoard field) {
@@ -54,9 +27,5 @@ public class ConsoleUtils {
             }
             System.out.println();
         }
-    }
-
-    public static int tileToString(Tile tile, GameBoard field) {
-        return field.getCode(field.tileImages, tile);
     }
 }
