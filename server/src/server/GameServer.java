@@ -48,30 +48,17 @@ public class GameServer {
                 if(request.contains("BEGIN")) {
                     System.out.println("successful get command begin");
                     process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
-                    GameBoard gameBoard = process.getBoard();
-                    List<Player> players = process.getPlayers();
-                    Heap heap = process.getHeap();
-                    Player pl = process.getPl();
 
-                    //отдаем команду что они созданы
                     outObject.writeObject("BEGIN_COMPLETE");
-                    sendState(outObject, gameBoard, heap, pl, players);
+                    sendState(outObject);
                 }  else if(request.contains("FIRST_STEP")) {
                     System.out.println("successful get command first step");
-
                     process.firstStep();
 
-                    GameBoard gameBoard = process.getBoard();
-                    List<Player> players = process.getPlayers();
-                    Heap heap = process.getHeap();
-                    Player pl = process.getPl();
-
-                    //отдаем команду что они созданы
                     outObject.writeObject("FIRST_STEP_COMPLETE");
-                    sendState(outObject, gameBoard, heap,pl, players);
+                    sendState(outObject);
                 } else if(request.contains("NEXT_STEP")) {
                     System.out.println("successful get command next step");
-
                     String code = request;
 
                     if(!request.equals("NEXT_STEP")){
@@ -81,36 +68,33 @@ public class GameServer {
                     }
                     process.gameStep(3, code);
 
-                    GameBoard gameBoard = process.getBoard();
-                    List<Player> players = process.getPlayers();
-                    Heap heap = process.getHeap();
-                    Player pl = process.getPl();
-
-                    //отдаем команду что они созданы
                     outObject.writeObject("NEXT_STEP_COMPLETE");
-                    sendState(outObject, gameBoard, heap, pl, players);
+                    sendState(outObject);
+                } else if (request.equals("GAME_OVER_CHECK")){
+                    process.gameOverCheck(process.getPlayers());
+                    outObject.writeObject("GAME_OVER_CHECK_COMPLETE");
+                    sendState(outObject);
+
+                    if (process.isGameOver()){
+                        gameOver = true;
+                        socket.close();
+                    }
                 }
                 System.out.println(request);
             }
-
-
-//            if(request.equals("99999")){ //TODO придумать вариант команды "конец игры"
-//                gameOver = true;
-//                socket.close();
-//            } else {
-//                networkStrategy.setValue(request);
-//                process.gameStep(3, "");
-//            }
-
         }
     }
 
-    private void sendState(ObjectOutputStream outObject, GameBoard gameBoard, Heap heap, Player pl, List<Player> players) throws IOException {
+    private void sendState(ObjectOutputStream outObject) throws IOException {
+        GameBoard gameBoard = process.getBoard();
+        List<Player> players = process.getPlayers();
+        Heap heap = process.getHeap();
+        Player pl = process.getPl();
+        boolean gameOver = process.isGameOver();
+        int checkFor = process.getCheckFor();
+
         outObject.reset();
-//        outObject.writeObject(gameBoard);
-//        outObject.writeObject(heap);
-//        outObject.writeObject(players);
-        sendData = new SendData(gameBoard, heap, pl, players);
+        sendData = new SendData(gameBoard, heap, pl, players, gameOver, checkFor);
         outObject.writeObject(sendData);
         outObject.flush();
     }

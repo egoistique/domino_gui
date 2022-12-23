@@ -8,6 +8,8 @@ public class SendData implements Serializable {
     private Heap heap;
     private Player pl;
     private List<Player> players;
+    private boolean gameOver;
+    private int checkFor;
 
     public GameBoard getGameBoard() {
         return gameBoard;
@@ -41,10 +43,28 @@ public class SendData implements Serializable {
         this.players = players;
     }
 
-    public SendData(GameBoard gameBoard, Heap heap, Player pl, List<Player> players) {
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public int getCheckFor() {
+        return checkFor;
+    }
+
+    public void setCheckFor(int checkFor) {
+        this.checkFor = checkFor;
+    }
+
+    public SendData(GameBoard gameBoard, Heap heap, Player pl, List<Player> players, boolean gameOver, int checkFor) {
         this.gameBoard = gameBoard;
         this.heap = heap;
         this.pl = pl;
         this.players = players;
+        this.gameOver = gameOver;
+        this.checkFor = checkFor;
     }
 }

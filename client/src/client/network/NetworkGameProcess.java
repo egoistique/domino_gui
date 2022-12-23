@@ -33,7 +33,6 @@ public class NetworkGameProcess extends AbstractGame {
             out = new PrintWriter(socket.getOutputStream(), true);
             inObject = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            //TODO handle exception properly
             e.printStackTrace();
         }
     }
@@ -138,13 +137,25 @@ public class NetworkGameProcess extends AbstractGame {
     public Player gameStep(int view, String code) throws IOException, ClassNotFoundException {
         out.println("NEXT_STEP" + code);
         Object s;
-        if((s = inObject.readObject().toString()) != null){
-            if(s.toString().contains("NEXT_STEP_COMPLETE")){
+        if ((s = inObject.readObject().toString()) != null) {
+            if (s.toString().contains("NEXT_STEP_COMPLETE")) {
                 //обновить данные на клиенте
                 updateData();
             }
         }
         return pl;
+    }
+
+    @Override
+    public void gameOverCheck(List<Player> players) throws IOException, ClassNotFoundException {
+        out.println("GAME_OVER_CHECK");
+        Object s;
+        if ((s = inObject.readObject().toString()) != null) {
+            if (s.toString().contains("GAME_OVER_CHECK_COMPLETE")) {
+                //обновить данные на клиенте
+                updateData();
+            }
+        }
     }
 
     public void updateData() throws IOException, ClassNotFoundException {
@@ -158,30 +169,7 @@ public class NetworkGameProcess extends AbstractGame {
         heap = sendData.getHeap();
         pl = sendData.getPl();
         players = sendData.getPlayers();
+        gameOver = sendData.isGameOver();
+        checkFor = sendData.getCheckFor();
     }
-
-    public void updateData1() throws IOException, ClassNotFoundException {
-        //обновить данные на клиенте
-        Object o;
-        if((o = inObject.readObject()) != null){
-
-            GameBoard gameBoard = (GameBoard) o;
-            board = gameBoard;
-        }
-
-        Object o1;
-        if((o1 = inObject.readObject()) != null){
-            heap = (Heap) o1;
-        }
-
-        List<Player> pls;
-        pls = (List) inObject.readObject();
-        players = pls;
-    }
-
-    @Override
-    public void gameOverCheck(List<Player> players) {
-
-    }
-
 }

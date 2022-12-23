@@ -6,7 +6,7 @@ import java.util.*;
 
 public class LocalGameProcess extends AbstractGame {
 
-    private List<Player> players = new ArrayList<>();
+    private final List<Player> players = new ArrayList<>();
     private Map<Coordinates, Integer> activeTiles = new HashMap<>();
 
     private Tile currTile;

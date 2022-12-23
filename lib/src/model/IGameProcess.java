@@ -24,7 +24,7 @@ public interface IGameProcess {
     Player gameStep(int view, String code) throws IOException, ClassNotFoundException;
 
     //проверить условие конца игры
-    void gameOverCheck(List<Player> players);
+    void gameOverCheck(List<Player> players) throws IOException, ClassNotFoundException;
 
     Heap getHeap();
 
