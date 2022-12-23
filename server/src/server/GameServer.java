@@ -44,24 +44,24 @@ public class GameServer {
         String request;
         boolean gameOver = false;
         while (!gameOver){
-            if((request = in.readLine()) != null){
-                if(request.contains("BEGIN")) {
+            if((request = in.readLine()) != null) {
+                if (request.contains("BEGIN")) {
                     System.out.println("successful get command begin");
                     process.beginGamePr(3, Integer.parseInt(request.substring(request.length() - 1)));
 
                     outObject.writeObject("BEGIN_COMPLETE");
                     sendState(outObject);
-                }  else if(request.contains("FIRST_STEP")) {
+                } else if (request.contains("FIRST_STEP")) {
                     System.out.println("successful get command first step");
                     process.firstStep();
 
                     outObject.writeObject("FIRST_STEP_COMPLETE");
                     sendState(outObject);
-                } else if(request.contains("NEXT_STEP")) {
+                } else if (request.contains("NEXT_STEP")) {
                     System.out.println("successful get command next step");
                     String code = request;
 
-                    if(!request.equals("NEXT_STEP")){
+                    if (!request.equals("NEXT_STEP")) {
                         code = code.replace("NEXT_STEP", "");
                     } else {
                         code = "";
@@ -69,6 +69,10 @@ public class GameServer {
                     process.gameStep(3, code);
 
                     outObject.writeObject("NEXT_STEP_COMPLETE");
+                    sendState(outObject);
+                } else if(request.contains("TAKE_FROM_BAZAR")) {
+                    process.takeTileFromBazar();
+                    outObject.writeObject("TAKE_FROM_BAZAR_COMPLETE");
                     sendState(outObject);
                 } else if (request.equals("GAME_OVER_CHECK")){
                     process.gameOverCheck(process.getPlayers());

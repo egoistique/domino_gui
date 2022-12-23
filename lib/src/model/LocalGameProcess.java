@@ -140,6 +140,11 @@ public class LocalGameProcess extends AbstractGame {
         }
     }
 
+    @Override
+    public void takeTileFromBazar(){
+        players.get(0).interactiveTakeFromBazar(heap);
+    }
+
     private <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
         return new HashSet<>(list1).equals(new HashSet<>(list2));
     }

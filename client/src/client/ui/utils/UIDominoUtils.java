@@ -193,9 +193,9 @@ public class UIDominoUtils {
     }
 
     //взять из базара
-    public static void takeFromBazar(AbstractGame uiProcess, MainTM mainPlTableModel){
-        uiProcess.getPlayers().get(0).interactiveTakeFromBazar(uiProcess.heap);
-        mainPlayersTilesToTable(uiProcess, mainPlTableModel);
+    public static void takeFromBazar(AbstractGame uiProcess) throws IOException, ClassNotFoundException {
+        uiProcess.takeTileFromBazar();
+        //mainPlayersTilesToTable(uiProcess, mainPlTableModel);
     }
 
     //вывести набор главного игрока

@@ -158,6 +158,18 @@ public class NetworkGameProcess extends AbstractGame {
         }
     }
 
+    @Override
+    public void takeTileFromBazar() throws IOException, ClassNotFoundException {
+        out.println("TAKE_FROM_BAZAR");
+        Object s;
+        if ((s = inObject.readObject().toString()) != null) {
+            if (s.toString().contains("TAKE_FROM_BAZAR_COMPLETE")) {
+                //обновить данные на клиенте
+                updateData();
+            }
+        }
+    }
+
     public void updateData() throws IOException, ClassNotFoundException {
         //обновить данные на клиенте
         Object o;

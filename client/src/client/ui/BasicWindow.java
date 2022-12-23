@@ -128,7 +128,13 @@ public class BasicWindow extends JFrame{
         buttonTakeFromBazar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIDominoUtils.takeFromBazar((AbstractGame) process, mainPlTableModel);
+                try {
+                    UIDominoUtils.takeFromBazar((AbstractGame) process);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 UIDominoUtils.mainPlayersTilesToTable((AbstractGame) process, mainPlTableModel);
                 mainPlTableModel.fireTableDataChanged();
                 UIDominoUtils.outBazar(f, bazarArea, (AbstractGame) process);

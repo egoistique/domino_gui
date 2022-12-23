@@ -30,5 +30,7 @@ public interface IGameProcess {
 
     void firstStep() throws IOException, ClassNotFoundException;
 
+    void takeTileFromBazar() throws IOException, ClassNotFoundException;
+
     GameBoard getBoard();
 }
