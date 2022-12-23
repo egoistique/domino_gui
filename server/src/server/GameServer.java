@@ -23,6 +23,8 @@ public class GameServer {
 
     private IGameProcess process;
 
+    private SendData sendData;
+
     public GameServer(int port) {
         this.port = port;
     }
@@ -49,10 +51,11 @@ public class GameServer {
                     GameBoard gameBoard = process.getBoard();
                     List<Player> players = process.getPlayers();
                     Heap heap = process.getHeap();
+                    Player pl = process.getPl();
 
                     //отдаем команду что они созданы
                     outObject.writeObject("BEGIN_COMPLETE");
-                    sendState(outObject, gameBoard, heap, players);
+                    sendState(outObject, gameBoard, heap, pl, players);
                 }  else if(request.contains("FIRST_STEP")) {
                     System.out.println("successful get command first step");
 
@@ -61,10 +64,11 @@ public class GameServer {
                     GameBoard gameBoard = process.getBoard();
                     List<Player> players = process.getPlayers();
                     Heap heap = process.getHeap();
+                    Player pl = process.getPl();
 
                     //отдаем команду что они созданы
                     outObject.writeObject("FIRST_STEP_COMPLETE");
-                    sendState(outObject, gameBoard, heap, players);
+                    sendState(outObject, gameBoard, heap,pl, players);
                 } else if(request.contains("NEXT_STEP")) {
                     System.out.println("successful get command next step");
 
@@ -80,10 +84,11 @@ public class GameServer {
                     GameBoard gameBoard = process.getBoard();
                     List<Player> players = process.getPlayers();
                     Heap heap = process.getHeap();
+                    Player pl = process.getPl();
 
                     //отдаем команду что они созданы
                     outObject.writeObject("NEXT_STEP_COMPLETE");
-                    sendState(outObject, gameBoard, heap, players);
+                    sendState(outObject, gameBoard, heap, pl, players);
                 }
                 System.out.println(request);
             }
@@ -100,11 +105,13 @@ public class GameServer {
         }
     }
 
-    private void sendState(ObjectOutputStream outObject, GameBoard gameBoard, Heap heap, List<Player> players) throws IOException {
+    private void sendState(ObjectOutputStream outObject, GameBoard gameBoard, Heap heap, Player pl, List<Player> players) throws IOException {
         outObject.reset();
-        outObject.writeObject(gameBoard);
-        outObject.writeObject(heap);
-        outObject.writeObject(players);
+//        outObject.writeObject(gameBoard);
+//        outObject.writeObject(heap);
+//        outObject.writeObject(players);
+        sendData = new SendData(gameBoard, heap, pl, players);
+        outObject.writeObject(sendData);
         outObject.flush();
     }
 }
