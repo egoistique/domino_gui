@@ -18,7 +18,7 @@ public class NetworkGameProcess extends AbstractGame {
     Socket socket;
     private PrintWriter out;
     ObjectInputStream inObject;
-    SendData sendData;
+
 
     public NetworkGameProcess(Player pl, String server, int port) {
         super(pl);
@@ -161,17 +161,17 @@ public class NetworkGameProcess extends AbstractGame {
     }
 
     public void updateData() throws IOException, ClassNotFoundException {
+        SendData sendData;
         //обновить данные на клиенте
         Object o;
         if((o = inObject.readObject()) != null){
             sendData = (SendData) o;
+            board = sendData.getGameBoard();
+            heap = sendData.getHeap();
+            pl = sendData.getPl();
+            players = sendData.getPlayers();
+            gameOver = sendData.isGameOver();
+            checkFor = sendData.getCheckFor();
         }
-
-        board = sendData.getGameBoard();
-        heap = sendData.getHeap();
-        pl = sendData.getPl();
-        players = sendData.getPlayers();
-        gameOver = sendData.isGameOver();
-        checkFor = sendData.getCheckFor();
     }
 }
